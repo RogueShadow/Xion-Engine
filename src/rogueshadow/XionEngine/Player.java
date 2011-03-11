@@ -65,8 +65,8 @@ public class Player {
 		this.y += deltaY;
 	}
 	
-	public void draw(){
-		image.draw(x,y);
+	public void draw(Integer worldOffsetx, Integer worldOffsety){
+		image.draw(worldOffsetx + x,worldOffsety + y);
 		
 	}
 	

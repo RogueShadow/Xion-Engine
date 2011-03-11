@@ -88,7 +88,7 @@ public class TestGame extends BasicGame {
         String mousex = Integer.toString(input.getMouseX());
         String mousey = Integer.toString(input.getMouseY());
         map.render(-offsetx,-offsety);
-        player.draw();
+        player.draw(-offsetx,-offsety);
         g.drawString("Hello World", 40 , 40);
         g.drawString(mousex + "/" + Integer.toString(maxX), 40, 60);
         g.drawString(mousey + "/" + Integer.toString(maxY), 40, 80);
