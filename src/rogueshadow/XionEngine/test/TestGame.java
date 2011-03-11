@@ -53,7 +53,8 @@ public class TestGame extends BasicGame {
     }
 
  
-    public void update(GameContainer container, int delta) throws SlickException {
+    @Override
+	public void update(GameContainer container, int delta) throws SlickException {
         Integer speed = 10;
         Integer buffer = 10;
         input = container.getInput();
@@ -76,7 +77,8 @@ public class TestGame extends BasicGame {
         if (offsety < 0)offsety = 0;
         if (offsety > maxY)offsety = maxY;
     }
-    public void render(GameContainer container, Graphics g) throws SlickException {;
+    @Override
+	public void render(GameContainer container, Graphics g) throws SlickException {;
         String mousex = Integer.toString(input.getMouseX());
         String mousey = Integer.toString(input.getMouseY());
         map.render(-offsetx,-offsety);
