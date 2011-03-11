@@ -9,6 +9,8 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
+import rogueshadow.XionEngine.Player;
+
 //TODO add networking support
 
 /**
@@ -21,7 +23,7 @@ public class TestGame extends BasicGame {
     public Input input;
     public GameContainer container;
     public Image background;
-    public Image box;
+    public Player player;
     public static  Integer width = 800;
     public static  Integer height = 600;
     public Image tiledBackground;
@@ -43,7 +45,7 @@ public class TestGame extends BasicGame {
     public void init(GameContainer container) throws SlickException {
         input = container.getInput();
         container.setTargetFrameRate(60);
-        box = new Image("res/background.png");
+        player = new Player("adam","Rogue Shadow", 50, 50, new Image("res/background.png"));
         map = new TiledMap("res/desert.tmx");
         offsetx = offsety = 0;
         container.setVSync(true);
@@ -67,6 +69,10 @@ public class TestGame extends BasicGame {
         if (input.getMouseX() < buffer)setOffset(-speed, 0);
         if (input.getMouseY() > container.getHeight() - buffer)setOffset(0, speed);
         if (input.getMouseX() > container.getWidth() - buffer)setOffset(speed, 0);
+        if (input.isKeyDown(Input.KEY_W))player.movePlayer(0,-speed);
+        if (input.isKeyDown(Input.KEY_S))player.movePlayer(0, speed);
+        if (input.isKeyDown(Input.KEY_A))player.movePlayer(-speed, 0);
+        if (input.isKeyDown(Input.KEY_D))player.movePlayer(speed, 0);
     }
 
     public void setOffset(Integer deltaX, Integer deltaY) {
@@ -82,7 +88,7 @@ public class TestGame extends BasicGame {
         String mousex = Integer.toString(input.getMouseX());
         String mousey = Integer.toString(input.getMouseY());
         map.render(-offsetx,-offsety);
-        box.draw(input.getMouseX(),input.getMouseY());
+        player.draw();
         g.drawString("Hello World", 40 , 40);
         g.drawString(mousex + "/" + Integer.toString(maxX), 40, 60);
         g.drawString(mousey + "/" + Integer.toString(maxY), 40, 80);
