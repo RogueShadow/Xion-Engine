@@ -35,6 +35,15 @@ public class Level {
 		map.render(-x, -y, 2);
 	}
 	public void movePlayer(int deltax, int deltay){
-		player.movePlayer(deltax, deltay);
+		if (! onWall( player.getX() + deltax, player.getY()))
+			player.movePlayer(deltax, 0);
+
+		if (! onWall( player.getX(), player.getY() + deltay ))
+			player.movePlayer(0, deltay);
+
+	}
+	public boolean onWall(int x, int y){
+		int id = getTileId(x/32, y/32, 1);
+		if (id == 0)return false; else return true;
 	}
 }
