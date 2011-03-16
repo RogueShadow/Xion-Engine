@@ -10,6 +10,7 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
 import rogueshadow.XionEngine.Player;
+import rogueshadow.XionEngine.Level;
 
 //TODO add networking support
 
@@ -19,11 +20,10 @@ import rogueshadow.XionEngine.Player;
  */
 public class TestGame extends BasicGame {
 
-    public TiledMap map;
+    public Level level;
     public Input input;
     public GameContainer container;
     public Image background;
-    public Player player;
     public static  Integer width = 800;
     public static  Integer height = 600;
     public Image tiledBackground;
@@ -45,20 +45,20 @@ public class TestGame extends BasicGame {
     public void init(GameContainer container) throws SlickException {
         input = container.getInput();
         container.setTargetFrameRate(60);
-        player = new Player("adam","Rogue Shadow", 50, 50, new Image("res/background.png"));
-        map = new TiledMap("res/desert.tmx");
+
+    	level = new Level(new TiledMap("res/xion_test.tmx"),new Player("adam","Rogue Shadow",50,50,new Image("res/background.png")));
         offsetx = offsety = 0;
         container.setVSync(true);
         //container.setFullscreen(true);
-        maxX = map.getWidth()*map.getTileWidth()-container.getWidth();
-        maxY = map.getHeight()*map.getTileHeight()-container.getHeight();
+        maxX = level.getWidth()*level.getTileWidth()-container.getWidth();
+        maxY = level.getHeight()*level.getTileHeight()-container.getHeight();
     }
 
  
     @Override
 	public void update(GameContainer container, int delta) throws SlickException {
         Integer speed = 10;
-        Integer buffer = 10;
+        Integer buffer = 50;
         input = container.getInput();
         if (input.isKeyDown(Input.KEY_UP))setOffset(0,-speed);
         if (input.isKeyDown(Input.KEY_DOWN))setOffset(0, speed);
@@ -69,10 +69,15 @@ public class TestGame extends BasicGame {
         if (input.getMouseX() < buffer)setOffset(-speed, 0);
         if (input.getMouseY() > container.getHeight() - buffer)setOffset(0, speed);
         if (input.getMouseX() > container.getWidth() - buffer)setOffset(speed, 0);
-        if (input.isKeyDown(Input.KEY_W))player.movePlayer(0,-speed);
-        if (input.isKeyDown(Input.KEY_S))player.movePlayer(0, speed);
-        if (input.isKeyDown(Input.KEY_A))player.movePlayer(-speed, 0);
-        if (input.isKeyDown(Input.KEY_D))player.movePlayer(speed, 0);
+        if (input.isKeyDown(Input.KEY_W))level.movePlayer(0,-speed);
+        if (input.isKeyDown(Input.KEY_S))level.movePlayer(0, speed);
+        if (input.isKeyDown(Input.KEY_A))level.movePlayer(-speed, 0);
+        if (input.isKeyDown(Input.KEY_D))level.movePlayer(speed, 0);
+        int gid = -1;
+        if (input.isMouseButtonDown(0)){
+        	gid = level.getTileId((input.getMouseX()/32)+(offsetx/32),(input.getMouseY()/32)+(offsety/32),1);
+            System.out.println("ID: " + gid + " X: " + ((input.getMouseX()/32)+(offsetx/32)) + " Y: " + ((input.getMouseY()/32)+(offsety/32)));
+        }
     }
 
     public void setOffset(Integer deltaX, Integer deltaY) {
@@ -87,8 +92,7 @@ public class TestGame extends BasicGame {
 	public void render(GameContainer container, Graphics g) throws SlickException {;
         String mousex = Integer.toString(input.getMouseX());
         String mousey = Integer.toString(input.getMouseY());
-        map.render(-offsetx,-offsety);
-        player.draw(-offsetx,-offsety);
+        level.render(offsetx, offsety);
         g.drawString("Hello World", 40 , 40);
         g.drawString(mousex + "/" + Integer.toString(maxX), 40, 60);
         g.drawString(mousey + "/" + Integer.toString(maxY), 40, 80);

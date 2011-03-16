@@ -42,8 +42,8 @@ public class Player {
 		this.image = image;
 	}
 
-	private Integer x;
-	private Integer y;
+	private int x = 0;
+	private int y = 0;
 	private String name;
 	public String getAccount() {
 		return account;
@@ -52,7 +52,7 @@ public class Player {
 	private String account;
 	private Image image;
 	
-	public Player(String account, String name, Integer x, Integer y, Image image) {
+	public Player(String account, String name, int x, int y, Image image) {
 		this.account = account;
 		this.name = name;
 		this.x = x;
@@ -65,7 +65,7 @@ public class Player {
 		this.y += deltaY;
 	}
 	
-	public void draw(Integer worldOffsetx, Integer worldOffsety){
+	public void draw(int worldOffsetx, int worldOffsety){
 		image.draw(worldOffsetx + x,worldOffsety + y);
 		
 	}
