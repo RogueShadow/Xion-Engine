@@ -24,7 +24,14 @@ public class TestGame extends BasicGame {
     public Input input;
     public GameContainer container;
     public Image background;
-    public static  Integer width = 800;
+    public static Integer getWidth() {
+		return width;
+	}
+
+	public static Integer getHeight() {
+		return height;
+	}
+	public static  Integer width = 800;
     public static  Integer height = 600;
     public Image tiledBackground;
     public Integer offsetx;
@@ -46,7 +53,7 @@ public class TestGame extends BasicGame {
         input = container.getInput();
         container.setTargetFrameRate(60);
 
-    	level = new Level(new TiledMap("res/xion_test.tmx"),new Player("adam","Rogue Shadow",50,50,new Image("res/background.png")));
+    	level = new Level(new TiledMap("res/xion_graal.tmx"),new Player("adam","Rogue Shadow",50,50,new Image("res/background.png")));
         offsetx = offsety = 0;
         container.setVSync(true);
         //container.setFullscreen(true);
@@ -73,11 +80,7 @@ public class TestGame extends BasicGame {
         if (input.isKeyDown(Input.KEY_S))level.movePlayer(0, speed);
         if (input.isKeyDown(Input.KEY_A))level.movePlayer(-speed, 0);
         if (input.isKeyDown(Input.KEY_D))level.movePlayer(speed, 0);
-        int gid = -1;
-        if (input.isMouseButtonDown(0)){
-        	gid = level.getTileId((input.getMouseX()/32)+(offsetx/32),(input.getMouseY()/32)+(offsety/32),1);
-            System.out.println("ID: " + gid + " X: " + ((input.getMouseX()/32)+(offsetx/32)) + " Y: " + ((input.getMouseY()/32)+(offsety/32)));
-        }
+
     }
 
     public void setOffset(Integer deltaX, Integer deltaY) {

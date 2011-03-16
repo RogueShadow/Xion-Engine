@@ -45,6 +45,25 @@ public class Player {
 	private int x = 0;
 	private int y = 0;
 	private String name;
+	public int getWidth() {
+		return width;
+	}
+
+	public void setWidth(int width) {
+		this.width = width;
+	}
+
+	public int getHeight() {
+		return height;
+	}
+
+	public void setHeight(int height) {
+		this.height = height;
+	}
+
+	private int width = 32;
+	private int height = 32;
+	
 	public String getAccount() {
 		return account;
 	}

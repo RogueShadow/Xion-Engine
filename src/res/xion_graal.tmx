@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="64" height="64" tilewidth="16" tileheight="16">
+ <tileset firstgid="1" name="dustys" tilewidth="16" tileheight="16">
+  <image source="dusty_pics1.png" width="2048" height="512"/>
+ </tileset>
+ <layer name="Ground" width="64" height="64">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC+3DMQ0AAAwDoDqY9UqujD2Q0Euqqqqqqqqqqqqqqqqqqqqqvh5IDZt9AEAAAA==
+  </data>
+ </layer>
+ <layer name="Blocking" width="64" height="64">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC+2ZWwuCQBBGlxQqu/7r8lo/ua8HX2W11XHyHDj0NsxwWBAKAQAAYN2UuxAqWctGtrKTL/nexc/ZFyEcivn2nItjFkIhT/IsL/Iqb/Kexc956Panw/tL3VjJWjaylZ18yfeI+732/1Lk6i/P8iKv8paPm+G1f0+texvZym7k7V8890+B9/6/Qn/60996CzvoT/8U/fs5Vr9TGeo/ZnY/x+p3KkM3buFtpOr/jyzZ3+r9x+y0BFbvP2anrcL7pz/9rbewg/7++qds5rF/ymb0j5u1pm9Xi/5r+nb1+GZT4vHNpoT+9Ke/9RZ20J/+9Lfewg76b7u/BV7/+0yF1/8+AQAAAAAAYJt8AIVbkzUAQAAA
+  </data>
+ </layer>
+ <layer name="Above" width="64" height="64">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC+3RWw5FQBQFUfy5NKZNP4esJkHnRq2k/s/OGQb9kx8ttFKgjfauF73npIsiJcpUqFLreNdb5pH/00IrBdpop2Psfd3zTjZeFClRpkKV2gf2zxP/p4VWCrTRTsfU+7rnnWy8KFKiTIUqtQ/slyRJkiRJkiRJkiRJkiRJkiRJkiRJ33ADpjB5hwBAAAA=
+  </data>
+ </layer>
+</map>
