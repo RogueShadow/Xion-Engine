@@ -32,6 +32,7 @@ public class BulletTest extends BasicGame {
 	public float dx = 0;
 	public float dy = 0;
 	public float dist = 0;
+	public int strength = 50;
 	public boolean isKeyDown = false;
 
 	public static void main(String[] argv) throws SlickException {
@@ -58,10 +59,21 @@ public class BulletTest extends BasicGame {
 	public void update(GameContainer container, int delta)
 			throws SlickException {
 		
-		
+		if (input.isKeyDown(Input.KEY_Q)){
+			gravs.clear();
+		}
+		if (input.isKeyDown(Input.KEY_W)){
+			bullets.clear();
+		}
+		if (input.isKeyDown(Input.KEY_A)){
+			if (strength < 100)strength++;
+		}
+		if (input.isKeyDown(Input.KEY_Z)){
+			if (strength > 0)strength--;
+		}
 		if (input.isMouseButtonDown(1) && !isKeyDown) {
 			isKeyDown = true;
-			gravs.add(new Pulser(input.getMouseX(), input.getMouseY(), 0, 10));
+			gravs.add(new Pulser(input.getMouseX(), input.getMouseY(), 0, strength));
 		}
 		if (!input.isMouseButtonDown(1) && !input.isMouseButtonDown(2) && isKeyDown)isKeyDown = false;
 		
@@ -73,7 +85,7 @@ public class BulletTest extends BasicGame {
 		}
 		if (input.isMouseButtonDown(2) && !isKeyDown){
 			isKeyDown = true;
-			gravs.add(new Pulser(input.getMouseX(), input.getMouseY(), 1, 10));
+			gravs.add(new Pulser(input.getMouseX(), input.getMouseY(), 1, strength));
 		}
 
 		for (Pulser p : gravs) {
@@ -83,7 +95,7 @@ public class BulletTest extends BasicGame {
 				float dy = b.getY() - p.getY();
 				float d = dx*dx + dy*dy;
 				d = (float) Math.pow(d, 0.5f);
-				float pow = (1f/d)*(p.getPow()/2f);
+				float pow = (1f/d)*(p.getPow()/5f);
 				float angle = (float) Math.atan2(dx, dy);
 				if (p.getType() == 0){
 					b.pull(angle,pow);
@@ -125,16 +137,19 @@ public class BulletTest extends BasicGame {
 		for (Pulser p: gravs) {
 			if (p.getType() == 0){
 			bullet.draw(p.getX() - (bullet.getWidth() / 2), p.getY()
-					- (bullet.getHeight() / 2), 2,Color.green);
+					- (bullet.getHeight() / 2), 1f + (p.getPow()/100f)*2,Color.green);
+			g.drawString(Integer.toString(p.getPow()), p.getX(), p.getY()+bullet.getHeight()+10);
 			}
 			if (p.getType() == 1){
 				bullet.draw(p.getX() - (bullet.getWidth() / 2), p.getY()
-						- (bullet.getHeight() / 2), 2,Color.red);
+						- (bullet.getHeight() / 2), 1f + (p.getPow()/100f)*2,Color.red);
+				g.drawString(Integer.toString(p.getPow()), p.getX(), p.getY()+bullet.getHeight()+10);
 				}
 		}
-		g.drawString((String) Integer.toString(bullets.size()), 30, 30);
-		g.drawString((String) "Angle: " + Float.toString(angle) + "Dist :"
-				+ Float.toString(dist), 30, 60);
+		g.drawString((String) "Dots: " + Integer.toString(bullets.size()) + " Left: Add dots  Right: Add Attracter  Left: Add Repulser", 10, 25);
+		g.drawString((String) "Q: Clear Pulsers W: Clear dots A: +str Z: -str", 10, 40);
+		g.drawString("Strength: " + Integer.toString(strength), 10, 55);
+		
 
 	}
 }

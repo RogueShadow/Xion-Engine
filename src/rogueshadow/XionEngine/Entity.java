@@ -52,5 +52,10 @@ public class Entity {
 		this.vx += Math.sin(angle)*speed;
 		this.vy += Math.cos(angle)*speed;
 	}
+	
+	public double getSpeed(){
+		double spd = Math.abs(vx) + Math.abs(vy);
+		return spd;
+	}
 
 }

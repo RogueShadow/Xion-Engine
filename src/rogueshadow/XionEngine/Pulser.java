@@ -3,6 +3,7 @@ package rogueshadow.XionEngine;
 public class Pulser extends Entity {
 	static final int ATTRACTER = 0;
 	static final int REPULSER = 1;
+
 	
 	public int getType() {
 		return type;
