@@ -14,92 +14,127 @@ import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 
 import rogueshadow.XionEngine.Projectile;
-
+import rogueshadow.XionEngine.Pulser;
 
 /**
- *
+ * 
  * @author Adam
  */
 public class BulletTest extends BasicGame {
 
 	public Input input;
-    public GameContainer container;
-    public ArrayList<Projectile> bullets = new ArrayList<Projectile>();
-    public Image background;
-    public Image bullet;
+	public GameContainer container;
+	public ArrayList<Projectile> bullets = new ArrayList<Projectile>();
+	public ArrayList<Pulser> gravs = new ArrayList<Pulser>();
+	public Image background;
+	public Image bullet;
+	public float angle = 0;
+	public float dx = 0;
+	public float dy = 0;
+	public float dist = 0;
+	public boolean isKeyDown = false;
 
+	public static void main(String[] argv) throws SlickException {
 
-    public static void main(String[] argv) throws SlickException {
+		AppGameContainer container = new AppGameContainer(new BulletTest(),
+				800, 600, false);
+		container.start();
+	}
 
+	public BulletTest() {
+		super("Test Game");
+	}
 
-	AppGameContainer container = new AppGameContainer(new BulletTest(), 800, 600, false);
-	container.start();
-    }
-    
-    public BulletTest(){
-        super("Test Game");
-    }
+	@Override
+	public void init(GameContainer container) throws SlickException {
+		container.setVSync(true);
 
-    @Override
-    public void init(GameContainer container) throws SlickException {
-        container.setVSync(true);
-        
-        input = container.getInput();
-        background = new Image("res/star_field.png");
-        bullet = new Image("res/bullet.png");
-    }
+		input = container.getInput();
+		background = new Image("res/star_field.png");
+		bullet = new Image("res/bullet.png");
+	}
 
-    @Override
-	public void update(GameContainer container, int delta) throws SlickException {
-    	if (input.isKeyDown(Input.KEY_ESCAPE))container.exit();
-    	if (input.isMouseButtonDown(0)){
-    		int shots = 150;
-    		
-    		for (int i = 0; i < shots; i++){
-    		shootBullet(input.getMouseX(),input.getMouseY(),  rand(360f), 50 + (int)(100*rand(1f)),(2f+rand(2f)));
-    	
-    		}
-    	}
-    		
-    	for (Iterator<Projectile> i = bullets.iterator(); i.hasNext(); ){
-    		
-    		Projectile b = i.next();
-    		
-    		
-    		
-    		if (!b.update()){
-    			i.remove();
-    		}
-    	}
-    	
-    }
-    
-    public void shootBullet(int x, int y, float angle, int life, float speed){
-  
-    	bullets.add(new Projectile(x,y,angle,life,speed,new Color(rand(1),rand(1),rand(1),1)));
-    	
-    }
+	@Override
+	public void update(GameContainer container, int delta)
+			throws SlickException {
+		
+		
+		if (input.isMouseButtonDown(1) && !isKeyDown) {
+			isKeyDown = true;
+			gravs.add(new Pulser(input.getMouseX(), input.getMouseY(), 0, 10));
+		}
+		if (!input.isMouseButtonDown(1) && !input.isMouseButtonDown(2) && isKeyDown)isKeyDown = false;
+		
+		if (input.isKeyDown(Input.KEY_ESCAPE))
+			container.exit();
+		if (input.isMouseButtonDown(0)) {
+					shootBullet(input.getMouseX(), input.getMouseY(),
+							rand(360f), 600, .5f);
+		}
+		if (input.isMouseButtonDown(2) && !isKeyDown){
+			isKeyDown = true;
+			gravs.add(new Pulser(input.getMouseX(), input.getMouseY(), 1, 10));
+		}
 
-    public float rand(float max){
-    	Random rnd = new Random();
-    	float i = rnd.nextFloat()*max;
-    	return i;
-    }
+		for (Pulser p : gravs) {
+			for (Iterator<Projectile> i = bullets.iterator(); i.hasNext();) {
+				Projectile b = i.next();
+				float dx = b.getX() - p.getX();
+				float dy = b.getY() - p.getY();
+				float d = dx*dx + dy*dy;
+				d = (float) Math.pow(d, 0.5f);
+				float pow = (1f/d)*(p.getPow()/2f);
+				float angle = (float) Math.atan2(dx, dy);
+				if (p.getType() == 0){
+					b.pull(angle,pow);
+				}else if (p.getType() == 1){
+					b.push(angle,pow);
+				}
+			}
+		}
 
-    @Override
-	public void render(GameContainer container, Graphics g) throws SlickException {
-		g.drawImage(background, 0, 0);
-		for (Iterator<Projectile> i = bullets.iterator(); i.hasNext(); 	){
+		for (Iterator<Projectile> i = bullets.iterator(); i.hasNext();) {
 			Projectile b = i.next();
+			if (!b.update())
+				i.remove();
+		}
+
+	}
+
+	public void shootBullet(int x, int y, float angle, int life, float speed) {
+
+		bullets.add(new Projectile(x, y, angle, life, speed));
+
+	}
+
+	public float rand(float max) {
+		Random rnd = new Random();
+		float i = rnd.nextFloat() * max;
+		return i;
+	}
+
+	@Override
+	public void render(GameContainer container, Graphics g)
+			throws SlickException {
+		g.drawImage(background, 0, 0);
+		for (Projectile b: bullets) {
 			float x = b.getX();
 			float y = b.getY();
-			
-
-			bullet.draw(x, y, b.getColor());
-		
-			
+			bullet.draw(x, y, b.getScale(),b.getColor());
+		}
+		for (Pulser p: gravs) {
+			if (p.getType() == 0){
+			bullet.draw(p.getX() - (bullet.getWidth() / 2), p.getY()
+					- (bullet.getHeight() / 2), 2,Color.green);
+			}
+			if (p.getType() == 1){
+				bullet.draw(p.getX() - (bullet.getWidth() / 2), p.getY()
+						- (bullet.getHeight() / 2), 2,Color.red);
+				}
 		}
 		g.drawString((String) Integer.toString(bullets.size()), 30, 30);
-	
-    }
+		g.drawString((String) "Angle: " + Float.toString(angle) + "Dist :"
+				+ Float.toString(dist), 30, 60);
+
+	}
 }

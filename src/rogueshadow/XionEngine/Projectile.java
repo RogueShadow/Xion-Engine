@@ -3,30 +3,17 @@ package rogueshadow.XionEngine;
 import org.newdawn.slick.Color;
 
 
-public class Projectile {
-	double index;
-	float x;
-	float y;
-	float vx;
-	float vy;
+public class Projectile extends Entity {
 	int life;
 	int lived;
-	float alpha = 1;
+	float scale = 1;
 	Color color = Color.white;
 	
-	public Projectile(float x, float y, float angle, int life, float speed, Color color){
-		this.color = color;
-		this.x = x;
-		this.y = y;
+	public Projectile(float x, float y, float angle, int life, float speed){
+		super(x,y);
 		this.life = life;
-		this.vx = (float) Math.sin(angle)*speed;
-		this.vy = (float) Math.cos(angle)*speed;
-	}
-	public float getX() {
-		return x;
-	}
-	public float getY() {
-		return y;
+		this.vx = Math.sin(angle)*speed;
+		this.vy = Math.cos(angle)*speed;
 	}
 	public boolean update(){
 		if (lived > life){	
@@ -35,33 +22,25 @@ public class Projectile {
 			lived++;
 			x += vx;
 			y += vy;
-			color.a = 1f - ((float) lived / (float) life);
+			color.a = 1f;
+			color.r = 1f;
+			color.g = 1f;
+			color.b = 1f;
 			if (x <0)vx*=-1;
 			if (y <0)vy*=-1;
 			if (x > 800)vx*= -1;
 			if (y > 600)vy*=-1;
-			vx*=.99f;
-			vy*=.99f;
 			return true;
 		}
 	}
 	public Color getColor(){
 		return color;
 	}
+	public void setColor(float r, float g, float b){
+		this.color = new Color(r,g,b,color.a);
+	}
 	public float getScale() {
-		return (1f - color.a*1f);
-	}
-	public float getVx() {
-		return vx;
-	}
-	public void setVx(float vx) {
-		this.vx = vx;
-	}
-	public float getVy() {
-		return vy;
-	}
-	public void setVy(float vy) {
-		this.vy = vy;
+		return this.scale;
 	}
 
 }
