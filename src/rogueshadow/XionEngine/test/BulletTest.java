@@ -30,6 +30,8 @@ public class BulletTest extends BasicGame {
 
 
     public static void main(String[] argv) throws SlickException {
+
+
 	AppGameContainer container = new AppGameContainer(new BulletTest(), 800, 600, false);
 	container.start();
     }
@@ -41,7 +43,7 @@ public class BulletTest extends BasicGame {
     @Override
     public void init(GameContainer container) throws SlickException {
         container.setVSync(true);
-
+        
         input = container.getInput();
         background = new Image("res/star_field.png");
         bullet = new Image("res/bullet.png");
@@ -49,18 +51,22 @@ public class BulletTest extends BasicGame {
 
     @Override
 	public void update(GameContainer container, int delta) throws SlickException {
-
+    	if (input.isKeyDown(Input.KEY_ESCAPE))container.exit();
     	if (input.isMouseButtonDown(0)){
     		int shots = 150;
     		
     		for (int i = 0; i < shots; i++){
-    		shootBullet(input.getMouseX(),input.getMouseY(),  rand(360f), 50 + (int)(100*rand(1f)),rand(2f));
+    		shootBullet(input.getMouseX(),input.getMouseY(),  rand(360f), 50 + (int)(100*rand(1f)),(2f+rand(2f)));
     	
     		}
     	}
     		
     	for (Iterator<Projectile> i = bullets.iterator(); i.hasNext(); ){
+    		
     		Projectile b = i.next();
+    		
+    		
+    		
     		if (!b.update()){
     			i.remove();
     		}
@@ -89,11 +95,11 @@ public class BulletTest extends BasicGame {
 			float y = b.getY();
 			
 
-			bullet.draw(x, y, b.getScale(),b.getColor());
+			bullet.draw(x, y, b.getColor());
 		
 			
 		}
 		g.drawString((String) Integer.toString(bullets.size()), 30, 30);
-		
+	
     }
 }

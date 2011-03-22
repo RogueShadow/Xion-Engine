@@ -36,8 +36,12 @@ public class Projectile {
 			x += vx;
 			y += vy;
 			color.a = 1f - ((float) lived / (float) life);
-			this.vy += .1f;
-			
+			if (x <0)vx*=-1;
+			if (y <0)vy*=-1;
+			if (x > 800)vx*= -1;
+			if (y > 600)vy*=-1;
+			vx*=.99f;
+			vy*=.99f;
 			return true;
 		}
 	}
@@ -45,7 +49,7 @@ public class Projectile {
 		return color;
 	}
 	public float getScale() {
-		return (8f - color.a*8f);
+		return (1f - color.a*1f);
 	}
 	public float getVx() {
 		return vx;
