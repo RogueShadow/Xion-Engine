@@ -1,10 +1,18 @@
 package rogueshadow.XionEngine;
 
 public class Entity {
-	float x = 0;
-	float y = 0;
+	double x = 0;
+	double y = 0;
 	double vx = 0;
 	double vy = 0;
+	boolean tracked = false;
+	
+	public boolean isTracked(){
+		return tracked;
+	}
+	public void track(boolean track){
+		tracked = track;
+	}
 	
 	public double getVx() {
 		return vx;
@@ -22,33 +30,33 @@ public class Entity {
 		this.vy = vy;
 	}
 
-	public Entity(float x, float y){
+	public Entity(double x, double y){
 		this.x = x;
 		this.y = y;
 	}
 	
-	public float getX() {
+	public double getX() {
 		return x;
 	}
 	
-	public float getY() {
+	public double getY() {
 		return y;
 	}
 
-	public void setX(float x) {
+	public void setX(double x) {
 		this.x = x;
 	}
 
-	public void setY(float y) {
+	public void setY(double y) {
 		this.y = y;
 	}
 	
-	public void pull(float angle, float speed){
+	public void pull(double angle, double speed){
 		this.vx -= Math.sin(angle)*speed;
 		this.vy -= Math.cos(angle)*speed;
 	}
 	
-	public void push(float angle, float speed){
+	public void push(double angle, double speed){
 		this.vx += Math.sin(angle)*speed;
 		this.vy += Math.cos(angle)*speed;
 	}

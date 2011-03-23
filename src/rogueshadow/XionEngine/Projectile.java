@@ -9,7 +9,7 @@ public class Projectile extends Entity {
 	float scale = 1;
 	Color color = Color.white;
 	
-	public Projectile(float x, float y, float angle, int life, float speed){
+	public Projectile(double x, double y, double angle, int life, double speed){
 		super(x,y);
 		this.life = life;
 		this.vx = Math.sin(angle)*speed;
@@ -26,10 +26,6 @@ public class Projectile extends Entity {
 			color.r = 1f;
 			color.g = 1f;
 			color.b = 1f;
-			if (x <0)vx*=-1;
-			if (y <0)vy*=-1;
-			if (x > 800)vx*= -1;
-			if (y > 600)vy*=-1;
 			return true;
 		}
 	}
