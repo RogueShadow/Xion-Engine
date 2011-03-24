@@ -5,6 +5,7 @@ import org.newdawn.slick.Graphics;
 
 
 public class Projectile extends Entity {
+	public static final int G = 10;
 	int life;
 	int lived;
 	int mass = 1;
