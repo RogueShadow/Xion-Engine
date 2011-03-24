@@ -36,7 +36,9 @@ public class Camera {
 		return zoom;
 	}
 	public void setZoom(double zoom){
+		double change = (this.zoom-zoom)*250;
 		this.zoom = zoom;
-
+		this.x += change;
+		this.y += change;
 	}
 }

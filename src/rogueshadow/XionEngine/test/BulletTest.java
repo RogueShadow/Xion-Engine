@@ -76,13 +76,12 @@ public class BulletTest extends BasicGame {
 	}
 	public void update(GameContainer container, int delta)
 			throws SlickException {
-
 		if (isKeyDown(Input.KEY_Q))gravs.clear();
 		if (isKeyDown(Input.KEY_E))bullets.clear();
-		if (isKeyDown(Input.KEY_W))cam.moveCam(0, -1);
-		if (isKeyDown(Input.KEY_A))cam.moveCam(-1, 0);
-		if (isKeyDown(Input.KEY_S))cam.moveCam(0, 1);
-		if (isKeyDown(Input.KEY_D))cam.moveCam(1, 0);
+		if (isKeyDown(Input.KEY_W))cam.moveCam(0, -((int)(cam.getZoom()*10)));
+		if (isKeyDown(Input.KEY_A))cam.moveCam(-((int)(cam.getZoom()*10)), 0);
+		if (isKeyDown(Input.KEY_S))cam.moveCam(0, ((int)(cam.getZoom()*10)));
+		if (isKeyDown(Input.KEY_D))cam.moveCam(((int)(cam.getZoom()*10)),0);
 		
 
 		if (isMouseButtonDown(1) && !isKeyDown) {
@@ -153,8 +152,8 @@ public class BulletTest extends BasicGame {
 			p.render(g,cam);
 		}
 		g.setColor(Color.white);
-		g.drawString((String) "Dots: " + Integer.toString(bullets.size()) + " Left: Add dots  Right: Add Attracter  Left: Add Repulser", 10, 25);
-		g.drawString((String) "Q: Clear Pulsers E: Clear dots MouseWheel: Strength", 10, 40);
+		g.drawString((String) "Dots: " + Integer.toString(bullets.size()) + " Pulsers: " + Integer.toString(gravs.size()) + " Left: Add dots  Right: Add Attracter  Left: Add Repulser", 10, 25);
+		g.drawString((String) "Q: Clear Pulsers, E: Clear dots, MouseWheel: Zoom,  WASD: Move", 10, 40);
 		g.drawString("Strength: " + Integer.toString(strength), 10, 55);
 		
 
