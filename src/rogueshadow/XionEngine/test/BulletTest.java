@@ -13,7 +13,7 @@ import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 
 import rogueshadow.XionEngine.Camera;
-import rogueshadow.XionEngine.Projectile;
+import rogueshadow.XionEngine.Body;
 import rogueshadow.XionEngine.Pulser;
 
 /**
@@ -28,7 +28,7 @@ public class BulletTest extends BasicGame {
 				WIDTH, HEIGHT, false);
 		container.start();
 	}
-	public ArrayList<Projectile> bullets = new ArrayList<Projectile>();
+	public ArrayList<Body> bullets = new ArrayList<Body>();
 	public Camera cam = new Camera(0, 0);
 	public GameContainer container;
 	public Input input;
@@ -77,7 +77,7 @@ public class BulletTest extends BasicGame {
 	@Override
 	public void render(GameContainer container, Graphics g)
 			throws SlickException {
-		for (Projectile b : bullets)
+		for (Body b : bullets)
 			b.render(g, cam);
 		for (Pulser p : pulsers)
 			p.render(g, cam);
@@ -94,7 +94,7 @@ public class BulletTest extends BasicGame {
 	}
 
 	public void shootBullet(int x, int y, float angle, int life, float speed) {
-		bullets.add(new Projectile(x, y, angle, life, speed));
+		bullets.add(new Body(x, y, angle, life, speed));
 	}
 	public void keyPressed(int key,char c){
 		System.out.print(Integer.toString(key) + " " + c);
@@ -145,8 +145,8 @@ public class BulletTest extends BasicGame {
 			pulsers.add(new Pulser(getMouseX(), getMouseY(), 1, strength));
 		}
 		for (Pulser p : pulsers) {
-			for (Iterator<Projectile> i = bullets.iterator(); i.hasNext();) {
-				Projectile b = i.next();
+			for (Iterator<Body> i = bullets.iterator(); i.hasNext();) {
+				Body b = i.next();
 				double dx = b.getX() - p.getX();
 				double dy = b.getY() - p.getY();
 				double d = dx * dx + dy * dy;
@@ -157,8 +157,8 @@ public class BulletTest extends BasicGame {
 				b.push(angle, pow);
 			}
 		}
-		for (Iterator<Projectile> i = bullets.iterator(); i.hasNext();) {
-			Projectile b = i.next();
+		for (Iterator<Body> i = bullets.iterator(); i.hasNext();) {
+			Body b = i.next();
 			if (!b.update(delta))
 				i.remove();
 		}

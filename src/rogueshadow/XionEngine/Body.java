@@ -4,13 +4,13 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 
 
-public class Projectile extends Entity {
+public class Body extends Entity {
 	int life;
 	int lived;
 	int mass = 1;
 	Color color = Color.white;
 	
-	public Projectile(double x, double y, double angle, int life, double speed){
+	public Body(double x, double y, double angle, int life, double speed){
 		super(x,y);
 		this.life = life;
 		this.vx = Math.sin(Math.toRadians(angle))*speed;
