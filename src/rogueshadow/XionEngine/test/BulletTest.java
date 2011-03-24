@@ -27,7 +27,7 @@ public class BulletTest extends BasicGame {
 	public static final int WIDTH = 800;
 	public static final int HEIGHT = 600;
 	public ArrayList<Projectile> bullets = new ArrayList<Projectile>();
-	public ArrayList<Pulser> gravs = new ArrayList<Pulser>();
+	public ArrayList<Pulser> pulsers = new ArrayList<Pulser>();
 	public float angle = 0;
 	public float dx = 0;
 	public float dy = 0;
@@ -76,7 +76,7 @@ public class BulletTest extends BasicGame {
 	}
 	public void update(GameContainer container, int delta)
 			throws SlickException {
-		if (isKeyDown(Input.KEY_Q))gravs.clear();
+		if (isKeyDown(Input.KEY_Q))pulsers.clear();
 		if (isKeyDown(Input.KEY_E))bullets.clear();
 		if (isKeyDown(Input.KEY_W))cam.moveCam(0, -((int)(cam.getZoom()*10)));
 		if (isKeyDown(Input.KEY_A))cam.moveCam(-((int)(cam.getZoom()*10)), 0);
@@ -86,7 +86,7 @@ public class BulletTest extends BasicGame {
 
 		if (isMouseButtonDown(1) && !isKeyDown) {
 			isKeyDown = true;
-			gravs.add(new Pulser(getMouseX(), getMouseY(), 0, strength));
+			pulsers.add(new Pulser(getMouseX(), getMouseY(), 0, strength));
 		}
 		if (!isMouseButtonDown(1) && !isMouseButtonDown(2) && isKeyDown)isKeyDown = false;
 		
@@ -100,10 +100,10 @@ public class BulletTest extends BasicGame {
 		}
 		if (isMouseButtonDown(2) && !isKeyDown){
 			isKeyDown = true;
-			gravs.add(new Pulser(getMouseX(), getMouseY(), 1, strength));
+			pulsers.add(new Pulser(getMouseX(), getMouseY(), 1, strength));
 		}
 
-		for (Pulser p : gravs) {
+		for (Pulser p : pulsers) {
 			for (Iterator<Projectile> i = bullets.iterator(); i.hasNext();) {
 				Projectile b = i.next();
 				double dx = b.getX() - p.getX();
@@ -148,11 +148,11 @@ public class BulletTest extends BasicGame {
 			b.render(g,cam);
 		}
 
-		for (Pulser p: gravs) {
+		for (Pulser p: pulsers) {
 			p.render(g,cam);
 		}
 		g.setColor(Color.white);
-		g.drawString((String) "Dots: " + Integer.toString(bullets.size()) + " Pulsers: " + Integer.toString(gravs.size()) + " Left: Add dots  Right: Add Attracter  Left: Add Repulser", 10, 25);
+		g.drawString((String) "Dots: " + Integer.toString(bullets.size()) + " Pulsers: " + Integer.toString(pulsers.size()) + " Left: Add dots  Right: Add Attracter  Left: Add Repulser", 10, 25);
 		g.drawString((String) "Q: Clear Pulsers, E: Clear dots, MouseWheel: Zoom,  WASD: Move", 10, 40);
 		g.drawString("Strength: " + Integer.toString(strength), 10, 55);
 		
