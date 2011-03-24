@@ -24,10 +24,10 @@ public class Projectile extends Entity {
 		color = new Color((float)Math.random(),(float)Math.random(),(float)Math.random(),1f);
 	}
 	public boolean update(int delta){
-		if (lived > life){	
+		if (lived > life && life != 0){	
 			return false;
 		}else{
-			lived += delta;
+			if (life != 0)lived += delta;
 			x += (vx*delta/500);
 			y += (vy*delta/500);
 			return true;
@@ -42,6 +42,10 @@ public class Projectile extends Entity {
 	public void render(Graphics g, Camera cam){
 		g.setColor(color);
 		g.fillOval( cam.getScreenX((int)getX()), cam.getScreenY((int)getY()),8,8);
+	}
+	public void setLife(int life){
+		this.life = life;
+		this.lived = 0;
 	}
 
 }
