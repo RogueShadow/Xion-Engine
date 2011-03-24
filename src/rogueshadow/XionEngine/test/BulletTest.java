@@ -24,8 +24,8 @@ public class BulletTest extends BasicGame {
 
 	public Input input;
 	public GameContainer container;
-	public static final int WIDTH = 800;
-	public static final int HEIGHT = 600;
+	public static int WIDTH = 800;
+	public static int HEIGHT = 600;
 	public ArrayList<Projectile> bullets = new ArrayList<Projectile>();
 	public ArrayList<Pulser> pulsers = new ArrayList<Pulser>();
 	public float angle = 0;
@@ -53,7 +53,7 @@ public class BulletTest extends BasicGame {
 	public static void main(String[] argv) throws SlickException {
 
 		AppGameContainer container = new AppGameContainer(new BulletTest(),
-				800, 600, false);
+				WIDTH, HEIGHT, false);
 		container.start();
 	}
 
