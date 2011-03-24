@@ -9,7 +9,6 @@ import org.newdawn.slick.BasicGame;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 
@@ -59,7 +58,7 @@ public class BulletTest extends BasicGame {
 	}
 
 	public BulletTest() {
-		super("Test Game");
+		super("Rogue Shadow's Dots and Pulsers of DOOOM!!!");
 	}
 
 	@Override
@@ -69,20 +68,21 @@ public class BulletTest extends BasicGame {
 	}
 
 	@Override
+	public void mouseWheelMoved(int change){
+		strength += (change/100);
+		if (strength > Pulser.MAX_STRENGTH)strength = Pulser.MAX_STRENGTH;
+		if (strength < 1)strength = 1;
+	}
 	public void update(GameContainer container, int delta)
 			throws SlickException {
+		
+		
 		
 		if (isKeyDown(Input.KEY_Q)){
 			gravs.clear();
 		}
 		if (isKeyDown(Input.KEY_W)){
 			bullets.clear();
-		}
-		if (isKeyDown(Input.KEY_A)){
-			if (strength < 100)strength++;
-		}
-		if (isKeyDown(Input.KEY_Z)){
-			if (strength > 0)strength--;
 		}
 
 		if (isMouseButtonDown(1) && !isKeyDown) {
