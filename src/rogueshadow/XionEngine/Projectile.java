@@ -7,9 +7,15 @@ import org.newdawn.slick.Graphics;
 public class Projectile extends Entity {
 	int life;
 	int lived;
-	float scale = 1;
+	int mass = 1;
 	Color color = Color.white;
 	
+	public int getMass(){
+		return this.mass;
+	}
+	public void setMass(int mass){
+		this.mass = mass;
+	}
 	public Projectile(double x, double y, double angle, int life, double speed){
 		super(x,y);
 		this.life = life;
@@ -32,9 +38,6 @@ public class Projectile extends Entity {
 	}
 	public void setColor(float r, float g, float b){
 		this.color = new Color(r,g,b,color.a);
-	}
-	public float getScale() {
-		return this.scale;
 	}
 	public void render(Graphics g, Camera cam){
 		g.setColor(color);
