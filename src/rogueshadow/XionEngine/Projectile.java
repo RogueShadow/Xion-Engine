@@ -38,7 +38,7 @@ public class Projectile extends Entity {
 	}
 	public void render(Graphics g, Camera cam){
 		g.setColor(color);
-		g.fillOval( cam.getScreenX((int)getX()), cam.getScreenY((int)getY()),8,8);
+		g.fillOval( cam.getScreenX((int)getX()), cam.getScreenY((int)getY()),(float)(8f*cam.getZoom()),(float)(8f*cam.getZoom()));
 	}
 
 }

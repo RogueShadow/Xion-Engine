@@ -38,10 +38,10 @@ public class BulletTest extends BasicGame {
 	
 
 	public Integer getMouseX(){
-		return cam.getScreenX(input.getMouseX());
+		return cam.getWorldX(input.getMouseX());
 	}
 	public Integer getMouseY(){
-		return cam.getScreenY(input.getMouseY());
+		return cam.getWorldY(input.getMouseY());
 	}
 	public Boolean isKeyDown(int key){
 		return input.isKeyDown(key);
@@ -69,7 +69,8 @@ public class BulletTest extends BasicGame {
 
 	@Override
 	public void mouseWheelMoved(int change){
-		strength += (change/100);
+		cam.setZoom((cam.getZoom() + (change/5000f)));
+		System.out.println(Double.toString(cam.getZoom()));
 		if (strength > Pulser.MAX_STRENGTH)strength = Pulser.MAX_STRENGTH;
 		if (strength < 1)strength = 1;
 	}

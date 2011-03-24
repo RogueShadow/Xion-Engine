@@ -4,7 +4,7 @@ package rogueshadow.XionEngine;
 public class Camera {
 	int x;
 	int y;
-	int zoom = 64;
+	double zoom = 1;
 	public Camera(int x, int y) {
 		this.x = x;
 		this.y = y;
@@ -21,21 +21,22 @@ public class Camera {
 		return y;
 	}
 	public int getScreenX(int worldX){
-		return ((x-worldX + x*zoom));
+		return (int)(x-(worldX*zoom));
 	}
 	public int getScreenY(int worldY){
-		return ((y-worldY + y*zoom));
+		return (int)(y-(worldY*zoom));
 	}
 	public int getWorldX(int screenX){
-		return (screenX - x*zoom);
+		return (int)((x/zoom)-screenX/zoom);
 	}
 	public int getWorldY(int screenY){
-		return (screenY - y*zoom);
+		return (int)((y/zoom)-screenY/zoom);
 	}
-	public int getZoom(){
+	public double getZoom(){
 		return zoom;
 	}
-	public void setZoom(int zoom){
+	public void setZoom(double zoom){
 		this.zoom = zoom;
+
 	}
 }

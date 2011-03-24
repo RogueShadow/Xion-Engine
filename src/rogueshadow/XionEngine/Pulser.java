@@ -39,7 +39,8 @@ public class Pulser extends Entity {
 		int y = (int) cam.getScreenY((int)getY());
 		Color c = (getType() == Pulser.REPULSER) ? Color.red:Color.green;
 		g.setColor(c);
-		g.fillOval(x, y,1f + (getPow()/10f)*2,1f + (getPow()/10f)*2);
+		float scale = (float)((1f + (getPow()/10f)*2)*cam.getZoom());
+		g.fillOval(x, y,scale,scale);
 		g.drawString(Integer.toString(getPow()), x, y + 20);
 	}
 
