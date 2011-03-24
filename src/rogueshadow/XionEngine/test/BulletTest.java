@@ -129,8 +129,10 @@ public class BulletTest extends BasicGame {
 		if (isKeyDown(Input.KEY_ESCAPE))
 			container.exit();
 		if (isMouseButtonDown(0)) {
+			for (int i = 0; i < 200; i ++){
 					shootBullet(getMouseX(), getMouseY(),
-							rand(360f), 600, 0);
+							rand(36f),(int) rand(10000), rand(2));
+			}
 		}
 		if (isMouseButtonDown(2) && !isKeyDown){
 			isKeyDown = true;

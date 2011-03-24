@@ -12,8 +12,8 @@ public class Projectile extends Entity {
 	public Projectile(double x, double y, double angle, int life, double speed){
 		super(x,y);
 		this.life = life;
-		this.vx = Math.sin(angle)*speed;
-		this.vy = Math.cos(angle)*speed;
+		this.vx = Math.sin(Math.toRadians(angle))*speed;
+		this.vy = Math.cos(Math.toRadians(angle))*speed;
 	}
 	public boolean update(int delta){
 		if (lived > life){	
