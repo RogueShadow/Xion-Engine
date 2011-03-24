@@ -14,6 +14,7 @@ public class Projectile extends Entity {
 		this.life = life;
 		this.vx = Math.sin(Math.toRadians(angle))*speed;
 		this.vy = Math.cos(Math.toRadians(angle))*speed;
+		color = new Color((float)Math.random(),(float)Math.random(),(float)Math.random(),1f);
 	}
 	public boolean update(int delta){
 		if (lived > life){	
@@ -22,10 +23,6 @@ public class Projectile extends Entity {
 			lived += delta;
 			x += (vx*delta/500);
 			y += (vy*delta/500);
-			color.a = 1f;
-			color.r = 1f;
-			color.g = 1f;
-			color.b = 1f;
 			return true;
 		}
 	}
