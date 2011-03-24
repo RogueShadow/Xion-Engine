@@ -5,7 +5,6 @@ public class Entity {
 	double y = 0;
 	double vx = 0;
 	double vy = 0;
-	
 	public double getVx() {
 		return vx;
 	}

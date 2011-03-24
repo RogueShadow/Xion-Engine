@@ -51,6 +51,7 @@ public class BulletTest extends BasicGame {
 	@Override
 	public void init(GameContainer container) throws SlickException {
 		container.setVSync(true);
+		container.setAlwaysRender(true);
 		input = container.getInput();
 	}
 
@@ -95,7 +96,9 @@ public class BulletTest extends BasicGame {
 	public void shootBullet(int x, int y, float angle, int life, float speed) {
 		bullets.add(new Projectile(x, y, angle, life, speed));
 	}
-
+	public void keyPressed(int key,char c){
+		System.out.print(Integer.toString(key) + " " + c);
+	}
 	public void update(GameContainer container, int delta)
 			throws SlickException {
 		if (isKeyDown(Input.KEY_X)){
