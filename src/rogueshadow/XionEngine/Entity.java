@@ -5,14 +5,6 @@ public class Entity {
 	double y = 0;
 	double vx = 0;
 	double vy = 0;
-	boolean tracked = false;
-	
-	public boolean isTracked(){
-		return tracked;
-	}
-	public void track(boolean track){
-		tracked = track;
-	}
 	
 	public double getVx() {
 		return vx;

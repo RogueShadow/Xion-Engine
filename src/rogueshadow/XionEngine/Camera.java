@@ -4,7 +4,7 @@ package rogueshadow.XionEngine;
 public class Camera {
 	int x;
 	int y;
-	int zoom = 100;
+	int zoom = 64;
 	public Camera(int x, int y) {
 		this.x = x;
 		this.y = y;

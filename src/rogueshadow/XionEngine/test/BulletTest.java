@@ -13,6 +13,7 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 
+import rogueshadow.XionEngine.Camera;
 import rogueshadow.XionEngine.Projectile;
 import rogueshadow.XionEngine.Pulser;
 
@@ -40,6 +41,7 @@ public class BulletTest extends BasicGame {
 	public static double zoom = 20;
 	static Integer cameraX = 0;
 	static Integer cameraY = 0;
+	public Camera cam = new Camera(0,0);
 	
 
 	public static Integer getCamX() {
@@ -58,10 +60,10 @@ public class BulletTest extends BasicGame {
 		return (int) (scale.doubleValue()/zoom);
 	}
 	public Integer getMouseX(){
-		return( (input.getMouseX()+getCamX())*getScale());
+		return cam.getScreenX(input.getMouseX());
 	}
 	public Integer getMouseY(){
-		return ((input.getMouseY()+getCamY())*getScale());
+		return cam.getScreenY(input.getMouseY());
 	}
 	public Boolean isKeyDown(int key){
 		return input.isKeyDown(key);
@@ -129,9 +131,9 @@ public class BulletTest extends BasicGame {
 		if (isKeyDown(Input.KEY_ESCAPE))
 			container.exit();
 		if (isMouseButtonDown(0)) {
-			for (int i = 0; i < 200; i ++){
+			for (int i = 0; i < 1; i ++){
 					shootBullet(getMouseX(), getMouseY(),
-							rand(36f),(int) (5000 + rand(10000)), 50 + rand(1000));
+							0,30000, 0);
 			}
 		}
 		if (isMouseButtonDown(2) && !isKeyDown){
@@ -148,17 +150,13 @@ public class BulletTest extends BasicGame {
 				d =  Math.pow(d, 0.5f);
 				double pow = (1/d)*(p.getPow()*5d);
 				double angle =  Math.atan2(dx, dy);
-				pow = (p.getType() == Pulser.ATTRACTER) ? -delta:delta;
+				pow = (p.getType() == Pulser.ATTRACTER) ? -1:1;
 				b.push(angle,pow);
 			}
 		}
 
 		for (Iterator<Projectile> i = bullets.iterator(); i.hasNext();) {
 			Projectile b = i.next();
-			if (b.isTracked()){
-				setCamX((int)(b.getX()/getScale()));
-				setCamY((int)(b.getY()/getScale()));
-			}
 			if (!b.update(delta))
 				i.remove();
 		}
