@@ -35,6 +35,7 @@ public class BulletTest extends BasicGame {
 	public int strength = (int) (Pulser.MAX_STRENGTH.floatValue()/2f);
 	public boolean isKeyDown = false;
 	public Camera cam = new Camera(0,0);
+	public double G = 10;
 	
 
 	public Integer getMouseX(){
@@ -86,7 +87,7 @@ public class BulletTest extends BasicGame {
 
 		if (isMouseButtonDown(1) && !isKeyDown) {
 			isKeyDown = true;
-			gravs.add(new Pulser(getMouseX(), getMouseY(), 0, strength));
+			
 		}
 		if (!isMouseButtonDown(1) && !isMouseButtonDown(2) && isKeyDown)isKeyDown = false;
 		
@@ -94,32 +95,26 @@ public class BulletTest extends BasicGame {
 			container.exit();
 		if (isMouseButtonDown(0)) {
 			for (int i = 0; i < 1; i ++){
-					shootBullet(getMouseX(), getMouseY(),
-							0,30000, 0);
+					shootBullet(getMouseX(), getMouseY(),0,30000, 0);
 			}
 		}
-		if (isMouseButtonDown(2) && !isKeyDown){
-			isKeyDown = true;
-			gravs.add(new Pulser(getMouseX(), getMouseY(), 1, strength));
-		}
-
-		for (Pulser p : gravs) {
-			for (Iterator<Projectile> i = bullets.iterator(); i.hasNext();) {
-				Projectile b = i.next();
-				double dx = b.getX() - p.getX();
-				double dy = b.getY() - p.getY();
-				double d = dx*dx + dy*dy;
-				d =  Math.pow(d, 0.5f);
-				double pow = (1/d)*(p.getPow()*5d);
-				double angle =  Math.atan2(dx, dy);
-				pow = (p.getType() == Pulser.ATTRACTER) ? -1:1;
-				b.push(angle,pow);
-			}
-		}
-
+		double dx = 0;
+		double dy = 0;
+		double dist = 0;
+		double angle = 0;
+		double force = 0;
 		for (Iterator<Projectile> i = bullets.iterator(); i.hasNext();) {
-			Projectile b = i.next();
-			if (!b.update(delta))
+			Projectile b1 = i.next();
+			for (Projectile b2: bullets){
+				if (b1 == b2)continue;
+				dx = b1.getX() - b2.getX();
+				dy = b1.getY() - b2.getY();
+				dist = Math.sqrt(dx*dx + dy*dy);
+				force = ((b1.getMass()*b2.getMass())/(dist*dist));
+				angle = Math.atan2(dx, dy);
+				b1.push(angle, force);
+			}
+			if (!b1.update(delta))
 				i.remove();
 		}
 

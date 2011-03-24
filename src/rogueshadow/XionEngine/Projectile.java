@@ -16,6 +16,14 @@ public class Projectile extends Entity {
 	public void setMass(int mass){
 		this.mass = mass;
 	}
+	
+	/**
+	 * @param x
+	 * @param y
+	 * @param angle Given in degrees
+	 * @param life   Set to 0 for unlimited life, unit is ms.
+	 * @param speed  used with angle to set initial vx,vy  velocities.
+	 */
 	public Projectile(double x, double y, double angle, int life, double speed){
 		super(x,y);
 		this.life = life;
