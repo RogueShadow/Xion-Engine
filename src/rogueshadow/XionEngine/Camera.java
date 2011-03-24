@@ -10,8 +10,8 @@ public class Camera {
 		this.y = y;
 	}
 	public int[] moveCam(int deltax, int deltay){
-		this.x += deltax;
-		this.y += deltay;
+		this.x -= deltax;
+		this.y -= deltay;
 		return new int[] {this.x,this.y};
 	}
 	public int getX(){
@@ -21,10 +21,10 @@ public class Camera {
 		return y;
 	}
 	public int getScreenX(int worldX){
-		return (worldX + x*zoom);
+		return ((x-worldX + x*zoom));
 	}
 	public int getScreenY(int worldY){
-		return (worldY + y*zoom);
+		return ((y-worldY + y*zoom));
 	}
 	public int getWorldX(int screenX){
 		return (screenX - x*zoom);
