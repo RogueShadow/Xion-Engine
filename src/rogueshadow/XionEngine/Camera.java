@@ -41,4 +41,9 @@ public class Camera {
 		this.x += change;
 		this.y += change;
 	}
+	public void setCam(int x, int y) {
+		this.x = x;
+		this.y = y;
+		
+	}
 }

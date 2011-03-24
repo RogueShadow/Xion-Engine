@@ -28,17 +28,12 @@ public class BulletTest extends BasicGame {
 				WIDTH, HEIGHT, false);
 		container.start();
 	}
-	public float angle = 0;
 	public ArrayList<Projectile> bullets = new ArrayList<Projectile>();
 	public Camera cam = new Camera(0, 0);
 	public GameContainer container;
-	public float dist = 0;
-	public float dx = 0;
-	public float dy = 0;
 	public Input input;
 	public boolean isKeyDown = false;
 	public ArrayList<Pulser> pulsers = new ArrayList<Pulser>();
-
 	public int strength = (int) (Pulser.MAX_STRENGTH.floatValue() / 2f);
 
 	public BulletTest() {
@@ -94,6 +89,7 @@ public class BulletTest extends BasicGame {
 				(String) "Q: Clear Pulsers, E: Clear dots, MouseWheel: Zoom,  WASD: Move",
 				10, 40);
 		g.drawString("Strength: " + Integer.toString(strength), 10, 55);
+		g.drawString("Strength +-: C,X   ResetZoom: Z" , 10, 70);
 	}
 
 	public void shootBullet(int x, int y, float angle, int life, float speed) {
@@ -102,6 +98,20 @@ public class BulletTest extends BasicGame {
 
 	public void update(GameContainer container, int delta)
 			throws SlickException {
+		if (isKeyDown(Input.KEY_X)){
+			strength -= (delta/10);
+			if (strength < 1)strength =1;
+		}
+		if (isKeyDown(Input.KEY_C)){
+			strength += (delta/10);
+			if (strength > Pulser.MAX_STRENGTH){
+				strength = Pulser.MAX_STRENGTH;
+			}
+		}
+		if (isKeyDown(Input.KEY_Z)){
+			cam.setZoom(1);
+			cam.setCam(0,0);
+		}
 		if (isKeyDown(Input.KEY_Q))
 			pulsers.clear();
 		if (isKeyDown(Input.KEY_E))
