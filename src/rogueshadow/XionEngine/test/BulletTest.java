@@ -146,17 +146,11 @@ public class BulletTest extends BasicGame {
 			throws SlickException {
 
 		for (Projectile b: bullets) {
-			g.setColor(b.getColor());
-			g.fillOval( cam.getScreenX((int)b.getX()), cam.getScreenY((int)b.getY()),8,8);
+			b.render(g,cam);
 		}
 
 		for (Pulser p: gravs) {
-			int x = (int) cam.getScreenX((int)p.getX());
-			int y = (int) cam.getScreenY((int)p.getY());
-			Color c = (p.getType() == Pulser.REPULSER) ? Color.red:Color.green;
-			g.setColor(c);
-			g.fillOval(x, y,1f + (p.getPow()/10f)*2,1f + (p.getPow()/10f)*2);
-			g.drawString(Integer.toString(p.getPow()), x, y + 20);
+			p.render(g,cam);
 		}
 		g.setColor(Color.white);
 		g.drawString((String) "Dots: " + Integer.toString(bullets.size()) + " Left: Add dots  Right: Add Attracter  Left: Add Repulser", 10, 25);

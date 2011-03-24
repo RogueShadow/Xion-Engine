@@ -1,6 +1,7 @@
 package rogueshadow.XionEngine;
 
 import org.newdawn.slick.Color;
+import org.newdawn.slick.Graphics;
 
 
 public class Projectile extends Entity {
@@ -34,6 +35,10 @@ public class Projectile extends Entity {
 	}
 	public float getScale() {
 		return this.scale;
+	}
+	public void render(Graphics g, Camera cam){
+		g.setColor(color);
+		g.fillOval( cam.getScreenX((int)getX()), cam.getScreenY((int)getY()),8,8);
 	}
 
 }

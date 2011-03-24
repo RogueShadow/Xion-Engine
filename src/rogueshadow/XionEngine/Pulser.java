@@ -1,5 +1,8 @@
 package rogueshadow.XionEngine;
 
+import org.newdawn.slick.Color;
+import org.newdawn.slick.Graphics;
+
 
 public class Pulser extends Entity {
 	public static final int ATTRACTER = 0;
@@ -24,12 +27,20 @@ public class Pulser extends Entity {
 	}
 
 	int type; // 0 - attractor. 1 - repulsor 
-	int pow; // 0-100, strength of force
+	int pow; //  strength of force
 	
 	public Pulser(double x, double y, int type, int pow) {
 		super(x, y);
 		this.type = type;
 		this.pow = pow;
+	}
+	public void render(Graphics g, Camera cam){
+		int x = (int) cam.getScreenX((int)getX());
+		int y = (int) cam.getScreenY((int)getY());
+		Color c = (getType() == Pulser.REPULSER) ? Color.red:Color.green;
+		g.setColor(c);
+		g.fillOval(x, y,1f + (getPow()/10f)*2,1f + (getPow()/10f)*2);
+		g.drawString(Integer.toString(getPow()), x, y + 20);
 	}
 
 }
