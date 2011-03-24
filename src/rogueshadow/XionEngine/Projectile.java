@@ -20,8 +20,8 @@ public class Projectile extends Entity {
 			return false;
 		}else{
 			lived += delta;
-			x += vx*delta;
-			y += vy*delta;
+			x += (vx*delta/500);
+			y += (vy*delta/500);
 			color.a = 1f;
 			color.r = 1f;
 			color.g = 1f;

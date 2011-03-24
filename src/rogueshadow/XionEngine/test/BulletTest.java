@@ -131,7 +131,7 @@ public class BulletTest extends BasicGame {
 		if (isMouseButtonDown(0)) {
 			for (int i = 0; i < 200; i ++){
 					shootBullet(getMouseX(), getMouseY(),
-							rand(36f),(int) rand(10000), rand(2));
+							rand(36f),(int) (5000 + rand(10000)), 50 + rand(1000));
 			}
 		}
 		if (isMouseButtonDown(2) && !isKeyDown){
@@ -148,11 +148,8 @@ public class BulletTest extends BasicGame {
 				d =  Math.pow(d, 0.5f);
 				double pow = (1/d)*(p.getPow()*5d);
 				double angle =  Math.atan2(dx, dy);
-				if (p.getType() == 0){
-					b.pull(angle,pow);
-				}else if (p.getType() == 1){
-					b.push(angle,pow);
-				}
+				pow = (p.getType() == Pulser.ATTRACTER) ? -delta:delta;
+				b.push(angle,pow);
 			}
 		}
 

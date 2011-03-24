@@ -51,11 +51,6 @@ public class Entity {
 		this.y = y;
 	}
 	
-	public void pull(double angle, double speed){
-		this.vx -= Math.sin(angle)*speed;
-		this.vy -= Math.cos(angle)*speed;
-	}
-	
 	public void push(double angle, double speed){
 		this.vx += Math.sin(angle)*speed;
 		this.vy += Math.cos(angle)*speed;
