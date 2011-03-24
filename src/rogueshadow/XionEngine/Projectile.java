@@ -15,13 +15,13 @@ public class Projectile extends Entity {
 		this.vx = Math.sin(angle)*speed;
 		this.vy = Math.cos(angle)*speed;
 	}
-	public boolean update(){
+	public boolean update(int delta){
 		if (lived > life){	
 			return false;
 		}else{
-			lived++;
-			x += vx;
-			y += vy;
+			lived += delta;
+			x += vx*delta;
+			y += vy*delta;
 			color.a = 1f;
 			color.r = 1f;
 			color.g = 1f;

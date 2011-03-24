@@ -160,7 +160,7 @@ public class BulletTest extends BasicGame {
 				setCamX((int)(b.getX()/getScale()));
 				setCamY((int)(b.getY()/getScale()));
 			}
-			if (!b.update())
+			if (!b.update(delta))
 				i.remove();
 		}
 
