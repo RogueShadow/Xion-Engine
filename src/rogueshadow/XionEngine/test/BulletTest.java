@@ -28,7 +28,7 @@ public class BulletTest extends BasicGame {
 				WIDTH, HEIGHT, false);
 		container.start();
 	}
-	public ArrayList<Body> bullets = new ArrayList<Body>();
+	public ArrayList<Body> bodies = new ArrayList<Body>();
 	public Camera cam = new Camera(0, 0);
 	public GameContainer container;
 	public Input input;
@@ -77,12 +77,12 @@ public class BulletTest extends BasicGame {
 	@Override
 	public void render(GameContainer container, Graphics g)
 			throws SlickException {
-		for (Body b : bullets)
+		for (Body b : bodies)
 			b.render(g, cam);
 		for (Pulser p : pulsers)
 			p.render(g, cam);
 		g.setColor(Color.white);
-		g.drawString((String) "Dots: " + Integer.toString(bullets.size())
+		g.drawString((String) "Dots: " + Integer.toString(bodies.size())
 				+ " Pulsers: " + Integer.toString(pulsers.size())
 				+ " Left: Add dots  Right: Add Attracter  Left: Add Repulser",
 				10, 25);
@@ -94,7 +94,7 @@ public class BulletTest extends BasicGame {
 	}
 
 	public void shootBullet(int x, int y, float angle, int life, float speed) {
-		bullets.add(new Body(x, y, angle, life, speed));
+		bodies.add(new Body(x, y, angle, life, speed));
 	}
 	public void keyPressed(int key,char c){
 		System.out.print(Integer.toString(key) + " " + c);
@@ -118,7 +118,7 @@ public class BulletTest extends BasicGame {
 		if (isKeyDown(Input.KEY_Q))
 			pulsers.clear();
 		if (isKeyDown(Input.KEY_E))
-			bullets.clear();
+			bodies.clear();
 		if (isKeyDown(Input.KEY_W))
 			cam.moveCam(0, -((int) (cam.getZoom() * 10)));
 		if (isKeyDown(Input.KEY_A))
@@ -145,7 +145,7 @@ public class BulletTest extends BasicGame {
 			pulsers.add(new Pulser(getMouseX(), getMouseY(), 1, strength));
 		}
 		for (Pulser p : pulsers) {
-			for (Iterator<Body> i = bullets.iterator(); i.hasNext();) {
+			for (Iterator<Body> i = bodies.iterator(); i.hasNext();) {
 				Body b = i.next();
 				double dx = b.getX() - p.getX();
 				double dy = b.getY() - p.getY();
@@ -157,7 +157,7 @@ public class BulletTest extends BasicGame {
 				b.push(angle, pow);
 			}
 		}
-		for (Iterator<Body> i = bullets.iterator(); i.hasNext();) {
+		for (Iterator<Body> i = bodies.iterator(); i.hasNext();) {
 			Body b = i.next();
 			if (!b.update(delta))
 				i.remove();
