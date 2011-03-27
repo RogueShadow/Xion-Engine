@@ -4,6 +4,7 @@
 package rogueshadow.XionEngine;
 
 import org.newdawn.slick.Image;
+import org.newdawn.slick.Input;
 
 /**
  * @author Adam
@@ -23,6 +24,14 @@ public class Player {
 	private int x = 0;
 
 	private int y = 0;
+	
+	int speed = 3;
+	
+	static Input input;
+
+	public static void setInput(Input input) {
+		Player.input = input;
+	}
 
 	public Player(String account, String name, int x, int y, Image image) {
 		this.account = account;
@@ -87,6 +96,14 @@ public class Player {
 	
 	public void setY(Integer y) {
 		this.y = y;
+	}
+
+	public void move(Level level) {
+        if (input.isKeyDown(Input.KEY_W))level.movePlayer(0,-speed);
+        if (input.isKeyDown(Input.KEY_S))level.movePlayer(0, speed);
+        if (input.isKeyDown(Input.KEY_A))level.movePlayer(-speed, 0);
+        if (input.isKeyDown(Input.KEY_D))level.movePlayer(speed, 0);
+		
 	}
 	
 }

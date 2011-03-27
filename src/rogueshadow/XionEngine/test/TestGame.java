@@ -59,6 +59,7 @@ public class TestGame extends BasicGame {
         //container.setFullscreen(true);
         maxX = level.getWidth()*level.getTileWidth()-container.getWidth();
         maxY = level.getHeight()*level.getTileHeight()-container.getHeight();
+        Player.setInput(container.getInput());
     }
 
  
@@ -76,10 +77,7 @@ public class TestGame extends BasicGame {
         if (input.getMouseX() < buffer)setOffset(-speed, 0);
         if (input.getMouseY() > container.getHeight() - buffer)setOffset(0, speed);
         if (input.getMouseX() > container.getWidth() - buffer)setOffset(speed, 0);
-        if (input.isKeyDown(Input.KEY_W))level.movePlayer(0,-speed);
-        if (input.isKeyDown(Input.KEY_S))level.movePlayer(0, speed);
-        if (input.isKeyDown(Input.KEY_A))level.movePlayer(-speed, 0);
-        if (input.isKeyDown(Input.KEY_D))level.movePlayer(speed, 0);
+        level.update();
 
     }
 

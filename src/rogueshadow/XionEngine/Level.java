@@ -49,4 +49,8 @@ public class Level {
 		int id = getTileId(x/getTileWidth(), y/getTileHeight(), 1);
 		if (id == 0)return false; else return true;
 	}
+	public void update() {
+		player.move(this);
+		
+	}
 }
