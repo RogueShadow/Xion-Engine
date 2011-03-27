@@ -42,9 +42,9 @@ public class Entity {
 		this.y = y;
 	}
 	
-	public void push(double angle, double speed){
-		this.vx += Math.sin(angle)*speed;
-		this.vy += Math.cos(angle)*speed;
+	public void push(double angle, double force){
+		this.vx += Math.sin(angle)*force;
+		this.vy += Math.cos(angle)*force;
 	}
 	
 	public double getSpeed(){

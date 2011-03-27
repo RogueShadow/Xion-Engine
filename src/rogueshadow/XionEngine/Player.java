@@ -7,7 +7,7 @@ import org.newdawn.slick.Image;
 
 /**
  * @author Adam
- *
+ * 
  */
 public class Player {
 	private String account;
@@ -32,16 +32,19 @@ public class Player {
 		this.image = image;
 	}
 
-	public void draw(int worldOffsetx, int worldOffsety){
-		image.draw(worldOffsetx + x,worldOffsety + y);
-		
+	public void draw(int worldOffsetx, int worldOffsety) {
+		image.draw(worldOffsetx + x, worldOffsety + y);
+
 	}
+
 	public String getAccount() {
 		return account;
 	}
+
 	public int getHeight() {
 		return height;
 	}
+
 	public Image getImage() {
 		return image;
 	}
@@ -61,11 +64,12 @@ public class Player {
 	public Integer getY() {
 		return y;
 	}
+
 	public void movePlayer(Integer deltaX, Integer deltaY) {
 		this.x += deltaX;
 		this.y += deltaY;
 	}
-	
+
 	public void setHeight(int height) {
 		this.height = height;
 	}
@@ -73,20 +77,21 @@ public class Player {
 	public void setImage(Image image) {
 		this.image = image;
 	}
+
 	public void setName(String name) {
 		this.name = name;
 	}
-	
+
 	public void setWidth(int width) {
 		this.width = width;
 	}
-	
+
 	public void setX(Integer x) {
 		this.x = x;
 	}
-	
+
 	public void setY(Integer y) {
 		this.y = y;
 	}
-	
+
 }

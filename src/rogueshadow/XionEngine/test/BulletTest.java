@@ -14,7 +14,6 @@ import org.newdawn.slick.SlickException;
 
 import rogueshadow.XionEngine.Camera;
 import rogueshadow.XionEngine.Body;
-import rogueshadow.XionEngine.Pulser;
 
 /**
  * 
@@ -51,6 +50,8 @@ public class BulletTest extends BasicGame {
 		container.setVSync(true);
 		container.setAlwaysRender(true);
 		input = container.getInput();
+		Body.setG(container.getGraphics());
+		Body.setCam(cam);
 	}
 
 	public Boolean isKeyDown(int key) {
@@ -76,7 +77,7 @@ public class BulletTest extends BasicGame {
 	public void render(GameContainer container, Graphics g)
 			throws SlickException {
 		for (Body b : bodies)
-			b.render(g, cam);
+			b.render();
 		g.setColor(Color.white);
 		g.drawString((String) "Bodies: " + Integer.toString(bodies.size())
 				+  " Left: Add bodies ",
@@ -87,8 +88,10 @@ public class BulletTest extends BasicGame {
 		g.drawString("ResetZoom: Z" , 10, 55);
 	}
 
-	public void addBody(int x, int y, float angle, int life, float speed) {
-		bodies.add(new Body(x, y, angle, life, speed));
+	public void addBody(int x, int y, float angle, int life, float speed, int mass) {
+		Body b = new Body(x,y,angle,life,speed);
+		b.setMass(mass);
+		bodies.add(b);
 	}
 	public void keyPressed(int key,char c){
 		System.out.print(Integer.toString(key) + " " + c);
@@ -111,6 +114,7 @@ public class BulletTest extends BasicGame {
 			cam.moveCam(((int) (cam.getZoom() * 10)), 0);
 		if (isMouseButtonDown(1) && !isKeyDown) {
 			isKeyDown = true;
+			addBody(getMouseX(), getMouseY(), 0, 30000, 0, 5000);
 		}
 		if (!isMouseButtonDown(1) && !isMouseButtonDown(2) && isKeyDown)
 			isKeyDown = false;
@@ -118,15 +122,29 @@ public class BulletTest extends BasicGame {
 			container.exit();
 		if (isMouseButtonDown(0)) {
 			for (int i = 0; i < 1; i++) {
-				addBody(getMouseX(), getMouseY(), 0, 30000, 0);
+				addBody(getMouseX(), getMouseY(), 0, 30000, 0, 100);
 			}
 		}
 		if (isMouseButtonDown(2) && !isKeyDown) {
 			isKeyDown = true;
 		}
+		double force = 0;
+		double dist = 0;
+		double dx = 0;
+		double dy = 0;
+		double angle = 0;
 		for (Iterator<Body> i = bodies.iterator(); i.hasNext();) {
-			Body b = i.next();
-			if (!b.update(delta))
+			Body b1 = i.next();
+			for (Body b2: bodies){
+				if (b1 == b2)continue;
+				dx = (b1.getX() - b2.getX());
+				dy = (b1.getY() - b2.getY());
+				dist = Math.sqrt(dx*dx + dy*dy);
+				angle = Math.atan2(dx,dy);
+				force = ((b1.getMass()*b2.getMass())/(dist*dist))*Body.G;
+				b2.push(angle, force);
+			}
+			if (!b1.update(delta))
 				i.remove();
 		}
 	}
