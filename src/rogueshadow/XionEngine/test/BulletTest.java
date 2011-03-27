@@ -33,8 +33,6 @@ public class BulletTest extends BasicGame {
 	public GameContainer container;
 	public Input input;
 	public boolean isKeyDown = false;
-	public ArrayList<Pulser> pulsers = new ArrayList<Pulser>();
-	public int strength = (int) (Pulser.MAX_STRENGTH.floatValue() / 2f);
 
 	public BulletTest() {
 		super("Rogue Shadow's Dots and Pulsers of DOOOM!!!");
@@ -79,21 +77,17 @@ public class BulletTest extends BasicGame {
 			throws SlickException {
 		for (Body b : bodies)
 			b.render(g, cam);
-		for (Pulser p : pulsers)
-			p.render(g, cam);
 		g.setColor(Color.white);
-		g.drawString((String) "Dots: " + Integer.toString(bodies.size())
-				+ " Pulsers: " + Integer.toString(pulsers.size())
-				+ " Left: Add dots  Right: Add Attracter  Left: Add Repulser",
+		g.drawString((String) "Bodies: " + Integer.toString(bodies.size())
+				+  " Left: Add bodies ",
 				10, 25);
 		g.drawString(
-				(String) "Q: Clear Pulsers, E: Clear dots, MouseWheel: Zoom,  WASD: Move",
+				(String) "E: Clear bodies, MouseWheel: Zoom,  WASD: Move",
 				10, 40);
-		g.drawString("Strength: " + Integer.toString(strength), 10, 55);
-		g.drawString("Strength +-: C,X   ResetZoom: Z" , 10, 70);
+		g.drawString("ResetZoom: Z" , 10, 55);
 	}
 
-	public void shootBullet(int x, int y, float angle, int life, float speed) {
+	public void addBody(int x, int y, float angle, int life, float speed) {
 		bodies.add(new Body(x, y, angle, life, speed));
 	}
 	public void keyPressed(int key,char c){
@@ -101,22 +95,10 @@ public class BulletTest extends BasicGame {
 	}
 	public void update(GameContainer container, int delta)
 			throws SlickException {
-		if (isKeyDown(Input.KEY_X)){
-			strength -= (delta/10);
-			if (strength < 1)strength =1;
-		}
-		if (isKeyDown(Input.KEY_C)){
-			strength += (delta/10);
-			if (strength > Pulser.MAX_STRENGTH){
-				strength = Pulser.MAX_STRENGTH;
-			}
-		}
 		if (isKeyDown(Input.KEY_Z)){
 			cam.setZoom(1);
 			cam.setCam(0,0);
 		}
-		if (isKeyDown(Input.KEY_Q))
-			pulsers.clear();
 		if (isKeyDown(Input.KEY_E))
 			bodies.clear();
 		if (isKeyDown(Input.KEY_W))
@@ -129,7 +111,6 @@ public class BulletTest extends BasicGame {
 			cam.moveCam(((int) (cam.getZoom() * 10)), 0);
 		if (isMouseButtonDown(1) && !isKeyDown) {
 			isKeyDown = true;
-			pulsers.add(new Pulser(getMouseX(), getMouseY(), 0, strength));
 		}
 		if (!isMouseButtonDown(1) && !isMouseButtonDown(2) && isKeyDown)
 			isKeyDown = false;
@@ -137,25 +118,11 @@ public class BulletTest extends BasicGame {
 			container.exit();
 		if (isMouseButtonDown(0)) {
 			for (int i = 0; i < 1; i++) {
-				shootBullet(getMouseX(), getMouseY(), 0, 30000, 0);
+				addBody(getMouseX(), getMouseY(), 0, 30000, 0);
 			}
 		}
 		if (isMouseButtonDown(2) && !isKeyDown) {
 			isKeyDown = true;
-			pulsers.add(new Pulser(getMouseX(), getMouseY(), 1, strength));
-		}
-		for (Pulser p : pulsers) {
-			for (Iterator<Body> i = bodies.iterator(); i.hasNext();) {
-				Body b = i.next();
-				double dx = b.getX() - p.getX();
-				double dy = b.getY() - p.getY();
-				double d = dx * dx + dy * dy;
-				d = Math.pow(d, 0.5f);
-				double pow = (1 / d) * (p.getPow() * 5d);
-				double angle = Math.atan2(dx, dy);
-				pow = (p.getType() == Pulser.ATTRACTER) ? -1 : 1;
-				b.push(angle, pow);
-			}
 		}
 		for (Iterator<Body> i = bodies.iterator(); i.hasNext();) {
 			Body b = i.next();
