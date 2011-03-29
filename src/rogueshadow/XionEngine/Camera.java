@@ -1,49 +1,44 @@
 package rogueshadow.XionEngine;
 
+import org.newdawn.slick.geom.Vector2f;
+
 
 public class Camera {
-	int x;
-	int y;
-	double zoom = 1;
-	public Camera(int x, int y) {
-		this.x = x;
-		this.y = y;
+	Vector2f pos;
+	float zoom = 0.1f;
+	public Camera(Vector2f pos) {
+		this.pos = pos;
 	}
-	public int[] moveCam(int deltax, int deltay){
-		this.x -= deltax;
-		this.y -= deltay;
-		return new int[] {this.x,this.y};
+	public Camera(float x, float y){
+		this.pos = new Vector2f(x,y);
 	}
-	public int getX(){
-		return x;
+	public void moveCam(float x, float y){
+		this.pos.add(new Vector2f(x,y));
 	}
-	public int getY(){
-		return y;
+	public float getScreenX(float worldX){
+		return (int)(pos.getX()-worldX*zoom);
 	}
-	public int getScreenX(int worldX){
-		return (int)(x-(worldX*zoom));
+	public float getScreenY(float worldY){
+		return (int)(pos.getY()-worldY*zoom);
 	}
-	public int getScreenY(int worldY){
-		return (int)(y-(worldY*zoom));
+	public float getWorldX(float screenX){
+		return ((pos.getX()-screenX)/zoom);
 	}
-	public int getWorldX(int screenX){
-		return (int)((x/zoom)-screenX/zoom);
+	public float getWorldY(float screenY){
+		return ((pos.getY()-screenY)/zoom);
 	}
-	public int getWorldY(int screenY){
-		return (int)((y/zoom)-screenY/zoom);
-	}
-	public double getZoom(){
+	public float getZoom(){
 		return zoom;
 	}
-	public void setZoom(double zoom){
-		double change = (this.zoom-zoom)*250;
+	public void setZoom(float zoom){
 		this.zoom = zoom;
-		this.x += change;
-		this.y += change;
+		if (this.zoom < 0)this.zoom = 0;
+		if (this.zoom > 10)this.zoom = 10;
 	}
-	public void setCam(int x, int y) {
-		this.x = x;
-		this.y = y;
-		
+	public void changeZoom(float delta){
+		setZoom(this.zoom+delta);
+	}
+	public void setCam(Vector2f pos) {
+		this.pos = pos;
 	}
 }

@@ -20,29 +20,28 @@ import rogueshadow.XionEngine.Level;
  */
 public class TestGame extends BasicGame {
 
-    public Level level;
-    public Input input;
-    public GameContainer container;
-    public Image background;
+    public static  final Integer HEIGHT = 600;
+    public static  final Integer WIDTH = 800;
+    public static Integer getHeight() {
+		return HEIGHT;
+	}
     public static Integer getWidth() {
-		return width;
+		return WIDTH;
 	}
-
-	public static Integer getHeight() {
-		return height;
-	}
-	public static  Integer width = 800;
-    public static  Integer height = 600;
-    public Image tiledBackground;
-    public Integer offsetx;
-    public Integer offsety;
-    public Integer maxX;
-    public Integer maxY;
-
     public static void main(String[] argv) throws SlickException {
-	AppGameContainer container = new AppGameContainer(new TestGame(), width, height, false);
+	AppGameContainer container = new AppGameContainer(new TestGame(), WIDTH, HEIGHT, false);
 	container.start();
     }
+
+	public Image background;
+	public GameContainer container;
+    public Input input;
+    public Level level;
+    public Integer maxX;
+    public Integer maxY;
+    public Integer offsetx;
+    public Integer offsety;
+    public Image tiledBackground;
     
     public TestGame(){
         super("Test Game");
@@ -52,7 +51,6 @@ public class TestGame extends BasicGame {
     public void init(GameContainer container) throws SlickException {
         input = container.getInput();
         container.setTargetFrameRate(60);
-
     	level = new Level(new TiledMap("res/xion_graal.tmx"),new Player("adam","Rogue Shadow",50,50,new Image("res/background.png")));
         offsetx = offsety = 0;
         container.setVSync(true);
@@ -63,6 +61,26 @@ public class TestGame extends BasicGame {
     }
 
  
+    @Override
+	public void render(GameContainer container, Graphics g) throws SlickException {;
+        String mousex = Integer.toString(input.getMouseX());
+        String mousey = Integer.toString(input.getMouseY());
+        
+        level.render(offsetx, offsety);
+        g.drawString("Hello World", 40 , 40);
+        g.drawString(mousex + "/" + Integer.toString(maxX), 40, 60);
+        g.drawString(mousey + "/" + Integer.toString(maxY), 40, 80);
+
+    }
+
+    public void setOffset(Integer deltaX, Integer deltaY) {
+        offsetx += deltaX;
+        offsety += deltaY;
+        if (offsetx < 0)offsetx = 0;
+        if (offsetx > maxX)offsetx = maxX;
+        if (offsety < 0)offsety = 0;
+        if (offsety > maxY)offsety = maxY;
+    }
     @Override
 	public void update(GameContainer container, int delta) throws SlickException {
         Integer speed = 10;
@@ -78,25 +96,6 @@ public class TestGame extends BasicGame {
         if (input.getMouseY() > container.getHeight() - buffer)setOffset(0, speed);
         if (input.getMouseX() > container.getWidth() - buffer)setOffset(speed, 0);
         level.update();
-
-    }
-
-    public void setOffset(Integer deltaX, Integer deltaY) {
-        offsetx += deltaX;
-        offsety += deltaY;
-        if (offsetx < 0)offsetx = 0;
-        if (offsetx > maxX)offsetx = maxX;
-        if (offsety < 0)offsety = 0;
-        if (offsety > maxY)offsety = maxY;
-    }
-    @Override
-	public void render(GameContainer container, Graphics g) throws SlickException {;
-        String mousex = Integer.toString(input.getMouseX());
-        String mousey = Integer.toString(input.getMouseY());
-        level.render(offsetx, offsety);
-        g.drawString("Hello World", 40 , 40);
-        g.drawString(mousex + "/" + Integer.toString(maxX), 40, 60);
-        g.drawString(mousey + "/" + Integer.toString(maxY), 40, 80);
 
     }
 }

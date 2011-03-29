@@ -1,55 +1,45 @@
 package rogueshadow.XionEngine;
 
+import org.newdawn.slick.geom.Vector2f;
+
 public class Entity {
-	double x = 0;
-	double y = 0;
-	double vx = 0;
-	double vy = 0;
-	public double getVx() {
-		return vx;
-	}
+	Vector2f pos;
+	Vector2f vel;
 
-	public void setVx(double vx) {
-		this.vx = vx;
+	public Entity(float x, float y){
+		this.pos = new Vector2f(x,y);
+		this.vel = new Vector2f(0);
 	}
-
-	public double getVy() {
-		return vy;
+	public Entity(float x, float y, Vector2f vel){
+		this.pos = new Vector2f(x,y);
+		this.vel = vel;
 	}
-
-	public void setVy(double vy) {
-		this.vy = vy;
+	public float getX() {
+		return this.pos.getX();
 	}
-
-	public Entity(double x, double y){
-		this.x = x;
-		this.y = y;
+	public float getY() {
+		return this.pos.getY();
 	}
-	
-	public double getX() {
-		return x;
+	public Vector2f getVel() {
+		return vel;
 	}
-	
-	public double getY() {
-		return y;
+	public void setVel(Vector2f vel) {
+		this.vel = vel;
 	}
-
-	public void setX(double x) {
-		this.x = x;
+	public void push(Vector2f v){
+		vel.add(v);
 	}
-
-	public void setY(double y) {
-		this.y = y;
+	public void pull(Vector2f v){
+		vel.sub(v);
 	}
-	
-	public void push(double angle, double speed){
-		this.vx += Math.sin(angle)*speed;
-		this.vy += Math.cos(angle)*speed;
+	public boolean update(int delta){
+		this.pos.add(vel.copy().scale(delta));
+		return true;
 	}
-	
-	public double getSpeed(){
-		double spd = Math.abs(vx) + Math.abs(vy);
-		return spd;
+	public Vector2f getPos(){
+		return this.pos;
 	}
-
+	public void setPos(float x, float y){
+		this.pos.set(x,y);
+	}
 }

@@ -9,12 +9,13 @@ import org.newdawn.slick.BasicGame;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.geom.Vector2f;
 
-import rogueshadow.XionEngine.Camera;
 import rogueshadow.XionEngine.Body;
-import rogueshadow.XionEngine.Pulser;
+import rogueshadow.XionEngine.Camera;
 
 /**
  * 
@@ -29,22 +30,21 @@ public class BulletTest extends BasicGame {
 		container.start();
 	}
 	public ArrayList<Body> bodies = new ArrayList<Body>();
-	public Camera cam = new Camera(0, 0);
 	public GameContainer container;
 	public Input input;
 	public boolean isKeyDown = false;
-	public ArrayList<Pulser> pulsers = new ArrayList<Pulser>();
-	public int strength = (int) (Pulser.MAX_STRENGTH.floatValue() / 2f);
+	public Image img;
+	public Camera cam = new Camera(0,0);
 
 	public BulletTest() {
 		super("Rogue Shadow's Dots and Pulsers of DOOOM!!!");
 	}
 
-	public Integer getMouseX() {
+	public float getMouseX() {
 		return cam.getWorldX(input.getMouseX());
 	}
 
-	public Integer getMouseY() {
+	public float getMouseY() {
 		return cam.getWorldY(input.getMouseY());
 	}
 
@@ -53,6 +53,11 @@ public class BulletTest extends BasicGame {
 		container.setVSync(true);
 		container.setAlwaysRender(true);
 		input = container.getInput();
+		img = new Image(32,32);
+		Graphics g = img.getGraphics();
+		g.setColor(Color.white);
+		g.fillOval(0, 0, 16, 16);
+		g.flush();
 	}
 
 	public Boolean isKeyDown(int key) {
@@ -61,11 +66,6 @@ public class BulletTest extends BasicGame {
 
 	public Boolean isMouseButtonDown(int button) {
 		return input.isMouseButtonDown(button);
-	}
-
-	@Override
-	public void mouseWheelMoved(int change) {
-		cam.setZoom((cam.getZoom() + (change / 5000f)));
 	}
 
 	public float rand(float max) {
@@ -77,89 +77,47 @@ public class BulletTest extends BasicGame {
 	@Override
 	public void render(GameContainer container, Graphics g)
 			throws SlickException {
-		for (Body b : bodies)
-			b.render(g, cam);
-		for (Pulser p : pulsers)
-			p.render(g, cam);
-		g.setColor(Color.white);
-		g.drawString((String) "Dots: " + Integer.toString(bodies.size())
-				+ " Pulsers: " + Integer.toString(pulsers.size())
-				+ " Left: Add dots  Right: Add Attracter  Left: Add Repulser",
-				10, 25);
-		g.drawString(
-				(String) "Q: Clear Pulsers, E: Clear dots, MouseWheel: Zoom,  WASD: Move",
-				10, 40);
-		g.drawString("Strength: " + Integer.toString(strength), 10, 55);
-		g.drawString("Strength +-: C,X   ResetZoom: Z" , 10, 70);
+		for (Body b : bodies){
+			float x = cam.getScreenX(b.getX()-8);
+			float y = cam.getScreenY(b.getY()-8);
+			img.draw(x,y,cam.getZoom()*(b.getMass()/10000f),b.getColor());
+			g.setColor(Color.white);
+			//g.drawString(Integer.toString((int)b.getMass()),cam.getScreenX(b.getX())-16,cam.getScreenY(b.getY())+16);
+			
+		}
+		g.drawString(Integer.toString(bodies.size()), 10, 40);
 	}
-
-	public void shootBullet(int x, int y, float angle, int life, float speed) {
-		bodies.add(new Body(x, y, angle, life, speed));
-	}
-	public void keyPressed(int key,char c){
-		System.out.print(Integer.toString(key) + " " + c);
+	public void mouseWheelMoved(int change){
+		float zoom = (change < 0) ? 0.05f:-0.05f;
+		zoom *= cam.getZoom();
+		cam.changeZoom(zoom);
 	}
 	public void update(GameContainer container, int delta)
 			throws SlickException {
-		if (isKeyDown(Input.KEY_X)){
-			strength -= (delta/10);
-			if (strength < 1)strength =1;
-		}
-		if (isKeyDown(Input.KEY_C)){
-			strength += (delta/10);
-			if (strength > Pulser.MAX_STRENGTH){
-				strength = Pulser.MAX_STRENGTH;
+
+		int speed = (int)(100*cam.getZoom());
+		if (isKeyDown(Input.KEY_W))cam.moveCam(0,speed);
+		if (isKeyDown(Input.KEY_S))cam.moveCam(0,- speed);
+		if (isKeyDown(Input.KEY_A))cam.moveCam(speed, 0);
+		if (isKeyDown(Input.KEY_D))cam.moveCam(-speed, 0);
+		if (isKeyDown(Input.KEY_Z))cam.setZoom(cam.getZoom()+0.01f);
+		if (isKeyDown(Input.KEY_X))cam.setZoom(cam.getZoom()-0.01f);
+		if (isMouseButtonDown(0)){
+			for (int i = 0; i < 1; i++ ){
+				Vector2f vec = new Vector2f(Math.toDegrees(Math.random()*Math.PI*2)).scale(0.01f);
+				bodies.add(new Body(getMouseX()-8,getMouseY()-8,vec,30000,(float)(1000f+Math.random()*50000f)));
 			}
 		}
-		if (isKeyDown(Input.KEY_Z)){
-			cam.setZoom(1);
-			cam.setCam(0,0);
-		}
-		if (isKeyDown(Input.KEY_Q))
-			pulsers.clear();
-		if (isKeyDown(Input.KEY_E))
-			bodies.clear();
-		if (isKeyDown(Input.KEY_W))
-			cam.moveCam(0, -((int) (cam.getZoom() * 10)));
-		if (isKeyDown(Input.KEY_A))
-			cam.moveCam(-((int) (cam.getZoom() * 10)), 0);
-		if (isKeyDown(Input.KEY_S))
-			cam.moveCam(0, ((int) (cam.getZoom() * 10)));
-		if (isKeyDown(Input.KEY_D))
-			cam.moveCam(((int) (cam.getZoom() * 10)), 0);
-		if (isMouseButtonDown(1) && !isKeyDown) {
-			isKeyDown = true;
-			pulsers.add(new Pulser(getMouseX(), getMouseY(), 0, strength));
-		}
-		if (!isMouseButtonDown(1) && !isMouseButtonDown(2) && isKeyDown)
-			isKeyDown = false;
-		if (isKeyDown(Input.KEY_ESCAPE))
-			container.exit();
-		if (isMouseButtonDown(0)) {
-			for (int i = 0; i < 1; i++) {
-				shootBullet(getMouseX(), getMouseY(), 0, 30000, 0);
-			}
-		}
-		if (isMouseButtonDown(2) && !isKeyDown) {
-			isKeyDown = true;
-			pulsers.add(new Pulser(getMouseX(), getMouseY(), 1, strength));
-		}
-		for (Pulser p : pulsers) {
-			for (Iterator<Body> i = bodies.iterator(); i.hasNext();) {
-				Body b = i.next();
-				double dx = b.getX() - p.getX();
-				double dy = b.getY() - p.getY();
-				double d = dx * dx + dy * dy;
-				d = Math.pow(d, 0.5f);
-				double pow = (1 / d) * (p.getPow() * 5d);
-				double angle = Math.atan2(dx, dy);
-				pow = (p.getType() == Pulser.ATTRACTER) ? -1 : 1;
-				b.push(angle, pow);
-			}
+		if (isMouseButtonDown(1)){
+			bodies.add(new Body(getMouseX(),getMouseY(),new Vector2f().scale(0),40000,100000f));
 		}
 		for (Iterator<Body> i = bodies.iterator(); i.hasNext();) {
-			Body b = i.next();
-			if (!b.update(delta))
+			Body b1 = i.next();
+			for (Body b2: bodies){
+				if (b1 == b2)continue;
+				b1.push(b1.getVectorToOther(b2));
+			}
+			if (!b1.update(delta))
 				i.remove();
 		}
 	}
