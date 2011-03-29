@@ -8,7 +8,7 @@ public class Entity {
 
 	public Entity(float x, float y){
 		this.pos = new Vector2f(x,y);
-		this.vel = new Vector2f(0);
+		this.vel = new Vector2f();
 	}
 	public Entity(float x, float y, Vector2f vel){
 		this.pos = new Vector2f(x,y);
@@ -33,7 +33,7 @@ public class Entity {
 		vel.sub(v);
 	}
 	public boolean update(int delta){
-		this.pos.add(vel.copy().scale(delta));
+		this.pos.add(this.vel.copy().scale(delta));
 		return true;
 	}
 	public Vector2f getPos(){
@@ -41,5 +41,8 @@ public class Entity {
 	}
 	public void setPos(float x, float y){
 		this.pos.set(x,y);
+	}
+	public Vector2f getVector(Body b){
+		return new Vector2f(this.getX()-b.getX(),this.getY()-b.getY());
 	}
 }

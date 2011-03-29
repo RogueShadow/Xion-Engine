@@ -12,7 +12,6 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.geom.Vector2f;
 
 import rogueshadow.XionEngine.Body;
 import rogueshadow.XionEngine.Camera;
@@ -32,9 +31,9 @@ public class BulletTest extends BasicGame {
 	public ArrayList<Body> bodies = new ArrayList<Body>();
 	public GameContainer container;
 	public Input input;
-	public boolean isKeyDown = false;
 	public Image img;
 	public Camera cam = new Camera(0,0);
+	public float strength = 1;
 
 	public BulletTest() {
 		super("Rogue Shadow's Dots and Pulsers of DOOOM!!!");
@@ -56,7 +55,7 @@ public class BulletTest extends BasicGame {
 		img = new Image(32,32);
 		Graphics g = img.getGraphics();
 		g.setColor(Color.white);
-		g.fillOval(0, 0, 16, 16);
+		g.fillOval(8, 8, 16, 16);
 		g.flush();
 	}
 
@@ -77,48 +76,81 @@ public class BulletTest extends BasicGame {
 	@Override
 	public void render(GameContainer container, Graphics g)
 			throws SlickException {
+		
 		for (Body b : bodies){
-			float x = cam.getScreenX(b.getX()-8);
-			float y = cam.getScreenY(b.getY()-8);
-			img.draw(x,y,cam.getZoom()*(b.getMass()/10000f),b.getColor());
-			g.setColor(Color.white);
-			//g.drawString(Integer.toString((int)b.getMass()),cam.getScreenX(b.getX())-16,cam.getScreenY(b.getY())+16);
+			float x = cam.getScreenX(b.getX()+16);
+			float y = cam.getScreenY(b.getY()+16);
+			img.draw(x,y,cam.getZoom(),b.getColor());
+			
 			
 		}
+		g.setColor(Color.white);
 		g.drawString(Integer.toString(bodies.size()), 10, 40);
+		g.drawString("Str: " + Float.toString(strength),10,55);
+		
 	}
 	public void mouseWheelMoved(int change){
 		float zoom = (change < 0) ? 0.05f:-0.05f;
 		zoom *= cam.getZoom();
 		cam.changeZoom(zoom);
 	}
+	public void keyPressed(int key, char c) {
+
+	}
+	public void keyReleased(int key, char c){
+		
+	}
+	public void mouseClicked(int button, int x, int y, int clickCount) {
+		if (button == 1){
+			Body b = new Body(getMouseX(),getMouseY(),Body.ATTRACTER);
+			b.setStrength(strength);
+			bodies.add(b);
+		}
+		if (button == 2){
+			Body b = new Body(getMouseX(),getMouseY(),Body.REPULSER);
+			b.setStrength(strength);
+			bodies.add(b);
+		}
+	}
 	public void update(GameContainer container, int delta)
 			throws SlickException {
-
 		int speed = (int)(100*cam.getZoom());
+		if (isKeyDown(Input.KEY_ESCAPE))container.exit();
 		if (isKeyDown(Input.KEY_W))cam.moveCam(0,speed);
 		if (isKeyDown(Input.KEY_S))cam.moveCam(0,- speed);
 		if (isKeyDown(Input.KEY_A))cam.moveCam(speed, 0);
 		if (isKeyDown(Input.KEY_D))cam.moveCam(-speed, 0);
-		if (isKeyDown(Input.KEY_Z))cam.setZoom(cam.getZoom()+0.01f);
-		if (isKeyDown(Input.KEY_X))cam.setZoom(cam.getZoom()-0.01f);
+		if (isKeyDown(Input.KEY_Q))bodies.clear();
+		if (isKeyDown(Input.KEY_Z)){
+			strength -= 0.01f;
+			if (strength <= 0.1f)strength = 0.1f;
+		}
+		if (isKeyDown(Input.KEY_X)){
+			strength += 0.1f;
+			if (strength >= 200)strength = 200;
+		}
 		if (isMouseButtonDown(0)){
-			for (int i = 0; i < 1; i++ ){
-				Vector2f vec = new Vector2f(Math.toDegrees(Math.random()*Math.PI*2)).scale(0.01f);
-				bodies.add(new Body(getMouseX()-8,getMouseY()-8,vec,30000,(float)(1000f+Math.random()*50000f)));
-			}
+			
+			Body b = new Body(getMouseX(),getMouseY());
+			b.setLife(10000);
+			bodies.add(b);
 		}
-		if (isMouseButtonDown(1)){
-			bodies.add(new Body(getMouseX(),getMouseY(),new Vector2f().scale(0),40000,100000f));
-		}
+
 		for (Iterator<Body> i = bodies.iterator(); i.hasNext();) {
 			Body b1 = i.next();
-			for (Body b2: bodies){
-				if (b1 == b2)continue;
-				b1.push(b1.getVectorToOther(b2));
+			if (b1.getType() == 0){
+				for (Body b2: bodies){
+					if (b2.getType() == Body.DOT)continue;
+					if (b1 == b2)continue;
+					if (b1.isColliding(b2)){
+						b1.setColor(0, 0, 1f);
+						b1.getPos().add(b1.getVector(b2));
+					}else{
+						b1.applyForce(b2);
+					}
+				}
 			}
-			if (!b1.update(delta))
-				i.remove();
+			if (!b1.update(delta)) i.remove();
 		}
 	}
 }

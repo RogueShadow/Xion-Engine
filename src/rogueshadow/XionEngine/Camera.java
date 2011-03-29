@@ -5,7 +5,7 @@ import org.newdawn.slick.geom.Vector2f;
 
 public class Camera {
 	Vector2f pos;
-	float zoom = 0.1f;
+	float zoom = 1f;
 	public Camera(Vector2f pos) {
 		this.pos = pos;
 	}
@@ -40,5 +40,8 @@ public class Camera {
 	}
 	public void setCam(Vector2f pos) {
 		this.pos = pos;
+	}
+	public void setCam(float x, float y){
+		this.pos = new Vector2f(x,y);
 	}
 }
