@@ -32,7 +32,7 @@ public class BulletTest extends BasicGame {
 	public GameContainer container;
 	public Input input;
 	public Image img;
-	public Camera cam = new Camera(0,0);
+	public Camera cam = new Camera(0,0,WIDTH,HEIGHT);
 	public float strength = 1;
 
 	public BulletTest() {
@@ -76,14 +76,15 @@ public class BulletTest extends BasicGame {
 	@Override
 	public void render(GameContainer container, Graphics g)
 			throws SlickException {
-		
+		cam.translateIn(g);
 		for (Body b : bodies){
-			float x = cam.getScreenX(b.getX()+16);
-			float y = cam.getScreenY(b.getY()+16);
-			img.draw(x,y,cam.getZoom(),b.getColor());
+			float x = b.getX()+16;
+			float y = b.getY()+16;
+			img.draw(x,y,b.getColor());
 			
 			
 		}
+		cam.translateOut(g);
 		g.setColor(Color.white);
 		g.drawString(Integer.toString(bodies.size()), 10, 40);
 		g.drawString("Str: " + Float.toString(strength),10,55);
@@ -116,10 +117,10 @@ public class BulletTest extends BasicGame {
 			throws SlickException {
 		int speed = (int)(100*cam.getZoom());
 		if (isKeyDown(Input.KEY_ESCAPE))container.exit();
-		if (isKeyDown(Input.KEY_W))cam.moveCam(0,speed);
-		if (isKeyDown(Input.KEY_S))cam.moveCam(0,- speed);
-		if (isKeyDown(Input.KEY_A))cam.moveCam(speed, 0);
-		if (isKeyDown(Input.KEY_D))cam.moveCam(-speed, 0);
+		if (isKeyDown(Input.KEY_W))cam.moveCam(0,-speed);
+		if (isKeyDown(Input.KEY_S))cam.moveCam(0,speed);
+		if (isKeyDown(Input.KEY_A))cam.moveCam(-speed, 0);
+		if (isKeyDown(Input.KEY_D))cam.moveCam(speed, 0);
 		if (isKeyDown(Input.KEY_Q))bodies.clear();
 		if (isKeyDown(Input.KEY_Z)){
 			strength -= 0.01f;

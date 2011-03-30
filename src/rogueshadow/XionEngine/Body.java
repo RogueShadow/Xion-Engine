@@ -73,9 +73,6 @@ public class Body extends Entity {
 	private Shape getShape() {
 		return this.shape;
 	}
-	private int getRadius() {
-		return this.radius;
-	}
 	public float getForce(Body b){
 		float dist = this.getPos().distance(b.getPos());
 		return (b.getStrength()/(dist*dist));

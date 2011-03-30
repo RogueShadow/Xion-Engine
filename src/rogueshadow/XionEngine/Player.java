@@ -5,48 +5,25 @@ package rogueshadow.XionEngine;
 
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
+import org.newdawn.slick.geom.Vector2f;
 
 /**
  * @author Adam
  *
  */
 public class Player {
-	private String account;
-
 	private int height = 32;
-
 	private Image image;
-
 	private String name;
-
 	private int width = 32;
+	private Vector2f pos;
+	private Vector2f vel;
+	int speed = 12;
 
-	private int x = 0;
-
-	private int y = 0;
-	
-	int speed = 3;
-	
-	static Input input;
-
-	public static void setInput(Input input) {
-		Player.input = input;
-	}
-
-	public Player(String account, String name, int x, int y, Image image) {
-		this.account = account;
+	public Player(String name, int x, int y, Image image) {
 		this.name = name;
-		this.x = x;
-		this.y = y;
+		this.pos = new Vector2f(x,y);
 		this.image = image;
-	}
-
-	public void draw(int worldOffsetx, int worldOffsety){
-		image.draw(worldOffsetx + x,worldOffsety + y);
-		
-	}
-	public String getAccount() {
-		return account;
 	}
 	public int getHeight() {
 		return height;
@@ -54,27 +31,15 @@ public class Player {
 	public Image getImage() {
 		return image;
 	}
-
 	public String getName() {
 		return name;
 	}
-
 	public int getWidth() {
 		return width;
 	}
-
-	public Integer getX() {
-		return x;
-	}
-
-	public Integer getY() {
-		return y;
-	}
 	public void movePlayer(Integer deltaX, Integer deltaY) {
-		this.x += deltaX;
-		this.y += deltaY;
+		this.pos.add(new Vector2f(deltaX,deltaY));
 	}
-	
 	public void setHeight(int height) {
 		this.height = height;
 	}
@@ -91,19 +56,35 @@ public class Player {
 	}
 	
 	public void setX(Integer x) {
-		this.x = x;
+		this.pos.set(x, this.pos.getY());
 	}
 	
 	public void setY(Integer y) {
-		this.y = y;
+		this.pos.set(this.pos.getX(), y);
 	}
 
-	public void move(Level level) {
-        if (input.isKeyDown(Input.KEY_W))level.movePlayer(0,-speed);
-        if (input.isKeyDown(Input.KEY_S))level.movePlayer(0, speed);
-        if (input.isKeyDown(Input.KEY_A))level.movePlayer(-speed, 0);
-        if (input.isKeyDown(Input.KEY_D))level.movePlayer(speed, 0);
-		
+	public Vector2f getPos() {
+		return pos;
+	}
+
+	public void setPos(Vector2f pos) {
+		this.pos = pos;
+	}
+
+	public Vector2f getVel() {
+		return vel;
+	}
+
+	public void setVel(Vector2f vel) {
+		this.vel = vel;
+	}
+
+	public int getSpeed() {
+		return speed;
+	}
+
+	public void setSpeed(int speed) {
+		this.speed = speed;
 	}
 	
 }

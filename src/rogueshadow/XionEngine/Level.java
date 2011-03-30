@@ -2,17 +2,25 @@ package rogueshadow.XionEngine;
 
 import org.newdawn.slick.tiled.*;
 import rogueshadow.XionEngine.Player;
-import rogueshadow.XionEngine.test.TestGame;
 
 public class Level {
 	TiledMap map;
 	Player player;
-	int x = 16;
-	int y = 16;
 	
-	public Level(TiledMap map, Player player) {
+	public TiledMap getMap() {
+		return map;
+	}
+	public void setMap(TiledMap map) {
 		this.map = map;
+	}
+	public Player getPlayer() {
+		return player;
+	}
+	public void setPlayer(Player player) {
 		this.player = player;
+	}
+	public Level(TiledMap map) {
+		this.map = map;
 	}
 	public int getWidth(){
 		return map.getWidth();
@@ -29,28 +37,20 @@ public class Level {
 	public int getTileId(int x, int y, int layer){
 		return map.getTileId( x, y, layer);
 	}
-	public void render(int x, int y){
-		map.render(0, 0, x/getTileWidth(), y/getTileHeight(), TestGame.getWidth()/getTileWidth(), TestGame.getHeight()/getTileHeight(), 0, false);
-		map.render(0, 0, x/getTileWidth(), y/getTileHeight(), TestGame.getWidth()/getTileWidth(), TestGame.getHeight()/getTileHeight(), 1, false);
-
-		player.draw(-x,-y);
-		map.render(0, 0, x/getTileWidth(), y/getTileHeight(), TestGame.getWidth()/getTileWidth(), TestGame.getHeight()/getTileHeight(), 2, false);
-
-	}
 	public void movePlayer(int deltax, int deltay){
-		if (! onWall( player.getX() + deltax - 16, player.getY()-16))
+		if (! onWall( player.getPos().getX() + deltax - 16, player.getPos().getY()-16))
 			player.movePlayer(deltax, 0);
 
-		if (! onWall( player.getX()-16, player.getY() + deltay -16))
+		if (! onWall( player.getPos().getX()-16, player.getPos().getY() + deltay -16))
 			player.movePlayer(0, deltay);
 
 	}
-	public boolean onWall(int x, int y){
-		int id = getTileId(x/getTileWidth(), y/getTileHeight(), 1);
+	public boolean onWall(float x, float y){
+		int id = getTileId((int)x/getTileWidth(),(int) y/getTileHeight(), 1);
 		if (id == 0)return false; else return true;
 	}
 	public void update() {
-		player.move(this);
+
 		
 	}
 }
