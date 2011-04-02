@@ -57,7 +57,8 @@ public class TestGame extends BasicGame {
         super("Great Tiles of Doom");
     }
     public Level loadLevel(String tmxFile) throws SlickException {
-    	return new Level(new TiledMap(tmxFile));
+    	String[] lvlname = tmxFile.split("/");
+    	return new Level(new TiledMap(tmxFile),lvlname[lvlname.length-1]);
     }
 
     @SuppressWarnings("unchecked")
@@ -75,7 +76,6 @@ public class TestGame extends BasicGame {
     	levels.add(level);
     	players.add(player);
     	players.add(p1);
-
     }
 
  

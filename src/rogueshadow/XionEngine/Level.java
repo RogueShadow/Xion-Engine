@@ -20,9 +20,6 @@ public class Level {
 		wpos.y = pos.y/map.getTileHeight();
 		return wpos;
 	}
-	public void setName(String name) {
-		this.name = name;
-	}
 	public TiledMap getMap() {
 		return map;
 	}
@@ -35,8 +32,9 @@ public class Level {
 	public void setPlayer(Player player) {
 		this.player = player;
 	}
-	public Level(TiledMap map) {
+	public Level(TiledMap map, String lvlname) {
 		this.map = map;
+		this.name = lvlname;
 	}
 	public int getWidth(){
 		return map.getWidth();
