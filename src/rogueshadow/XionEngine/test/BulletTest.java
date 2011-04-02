@@ -40,11 +40,11 @@ public class BulletTest extends BasicGame {
 	}
 
 	public float getMouseX() {
-		return cam.getWorldX(input.getMouseX());
+		return (input.getMouseX()-cam.getPos().getX());
 	}
 
 	public float getMouseY() {
-		return cam.getWorldY(input.getMouseY());
+		return (input.getMouseY()-cam.getPos().getY());
 	}
 
 	@Override
@@ -90,11 +90,6 @@ public class BulletTest extends BasicGame {
 		g.drawString("Str: " + Float.toString(strength),10,55);
 		
 	}
-	public void mouseWheelMoved(int change){
-		float zoom = (change < 0) ? 0.05f:-0.05f;
-		zoom *= cam.getZoom();
-		cam.changeZoom(zoom);
-	}
 	public void keyPressed(int key, char c) {
 
 	}
@@ -115,7 +110,7 @@ public class BulletTest extends BasicGame {
 	}
 	public void update(GameContainer container, int delta)
 			throws SlickException {
-		int speed = (int)(100*cam.getZoom());
+		int speed = 100;
 		if (isKeyDown(Input.KEY_ESCAPE))container.exit();
 		if (isKeyDown(Input.KEY_W))cam.moveCam(0,-speed);
 		if (isKeyDown(Input.KEY_S))cam.moveCam(0,speed);
@@ -136,9 +131,10 @@ public class BulletTest extends BasicGame {
 			b.setLife(10000);
 			bodies.add(b);
 		}
-
+		if (!bodies.isEmpty())cam.focusCam(bodies.get(0).getPos());
 		for (Iterator<Body> i = bodies.iterator(); i.hasNext();) {
 			Body b1 = i.next();
+			
 			if (b1.getType() == 0){
 				for (Body b2: bodies){
 					if (b2.getType() == Body.DOT)continue;
