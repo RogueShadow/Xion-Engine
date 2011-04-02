@@ -9,7 +9,7 @@ import rogueshadow.XionEngine.Player;
 public class Level {
 	TiledMap map;
 	Player player;
-	String name; // try to keep this a unique name
+	String name; 
 	
 	public String getName() {
 		return name;

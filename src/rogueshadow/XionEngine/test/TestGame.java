@@ -2,6 +2,7 @@ package rogueshadow.XionEngine.test;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.BasicGame;
@@ -38,6 +39,7 @@ public class TestGame extends BasicGame {
     }
 	public static GameContainer container;
     public Input input;
+    public boolean debugmode = true;
     public ArrayList<Level> levels = new ArrayList<Level>();
     public ArrayList<Player> players = new ArrayList<Player>();
     public Camera cam;
@@ -49,19 +51,37 @@ public class TestGame extends BasicGame {
     public Level getCurrentLevel(){
     	return levels.get(currentLevel);
     }
-    public void setCurrentLevel(int i){
-    	currentLevel = i;
-    	//TODO add code to attempt to find and load a level.
+    public boolean setCurrentLevel(String level){
+    	int levelIndex = -1;
+    	for (Level l: levels){
+    		if (l.getName().equals(level)){
+    			levelIndex = levels.indexOf(l);
+    			break;
+    		}
+    	}
+    	if (levelIndex != -1){
+    		currentLevel = levelIndex;
+    		cam = new Camera(WIDTH,HEIGHT,getCurrentLevel().getWidth(),getCurrentLevel().getHeight(),getCurrentLevel().getTileHeight());
+    		for (Player p: players){
+    			p.setLevel(getCurrentLevel());
+    		}
+    		return true;
+    	}
+    	return false;
     }
     public TestGame(){
         super("Great Tiles of Doom");
     }
     public Level loadLevel(String tmxFile) throws SlickException {
     	String[] lvlname = tmxFile.split("/");
-    	return new Level(new TiledMap(tmxFile),lvlname[lvlname.length-1]);
+    	String lvlname2 = lvlname[lvlname.length-1];
+    	lvlname2 = lvlname2.substring(0, lvlname2.length()-4);
+    	if (debugmode)System.out.println("Loaded Level: " + lvlname2);
+    	return new Level(new TiledMap(tmxFile),lvlname2);
     }
 
-    @SuppressWarnings("unchecked")
+
+	@SuppressWarnings("unchecked")
 	@Override
     public void init(GameContainer container) throws SlickException {
         input = container.getInput();
@@ -69,20 +89,24 @@ public class TestGame extends BasicGame {
         debug.getEffects().add(new ColorEffect(java.awt.Color.white));
         debug.addAsciiGlyphs();
         debug.loadGlyphs();
-    	Level level = loadLevel("res/xion_graal.tmx");
-    	Player player = new Player("Rogue",50,50,new Rectangle(0,0,2,3),level);
-    	Player p1 = new Player("Shadow",5,5,new Rectangle(0,0,2,2),level);
-    	cam = new Camera(0,0,WIDTH,HEIGHT,level.getHeight(),level.getWidth(),level.getTileHeight());
-    	levels.add(level);
+    	Player player = new Player("Rogue",new Rectangle(0,0,2,3));
+    	Player p1 = new Player("Shadow",new Rectangle(0,0,2,2));
+
+    	levels.add(loadLevel("res/xion_graal.tmx"));
+    	levels.add(loadLevel("res/xion_graal.tmx"));
     	players.add(player);
     	players.add(p1);
+    	if (!setCurrentLevel("xion_graal")){
+    		System.out.println("Failed to set level");
+    		container.exit();
+    	}
     }
 
  
     @Override
 	public void render(GameContainer container, Graphics g) throws SlickException {;
-		cam.translateIn(g);
 		
+		cam.translateIn(g);
         levels.get(currentLevel).getMap().render(0, 0,0);
         levels.get(currentLevel).getMap().render(0, 0, 1);
         for (Player p: players){

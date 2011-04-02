@@ -32,7 +32,7 @@ public class BulletTest extends BasicGame {
 	public GameContainer container;
 	public Input input;
 	public Image img;
-	public Camera cam = new Camera(0,0,WIDTH,HEIGHT);
+	public Camera cam;
 	public float strength = 1;
 
 	public BulletTest() {
@@ -112,10 +112,6 @@ public class BulletTest extends BasicGame {
 			throws SlickException {
 		int speed = 100;
 		if (isKeyDown(Input.KEY_ESCAPE))container.exit();
-		if (isKeyDown(Input.KEY_W))cam.moveCam(0,-speed);
-		if (isKeyDown(Input.KEY_S))cam.moveCam(0,speed);
-		if (isKeyDown(Input.KEY_A))cam.moveCam(-speed, 0);
-		if (isKeyDown(Input.KEY_D))cam.moveCam(speed, 0);
 		if (isKeyDown(Input.KEY_Q))bodies.clear();
 		if (isKeyDown(Input.KEY_Z)){
 			strength -= 0.01f;

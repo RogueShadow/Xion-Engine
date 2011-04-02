@@ -16,6 +16,7 @@ import rogueshadow.XionEngine.test.TestGame;
  *
  */
 public class Player extends Entity {
+	boolean initialized = false;
 	private String name;
 	Shape shape;
 	int WorldW;
@@ -25,13 +26,20 @@ public class Player extends Entity {
 		this.level = level;
 		this.WorldW = level.getWidth();
 		this.WorldH = level.getHeight();
+		this.initialized = true;
+	}
+	public void setLevel(Level level, float x, float y){
+		this.pos = new Vector2f(x,y);
+		this.level = level;
+		this.WorldW = level.getWidth();
+		this.WorldH = level.getHeight();
+		this.initialized = true;
 	}
 	float speed = 12f/1000f;
 
-	public Player(String name, int x, int y, Shape shape, Level level) {
-		super(x,y);
+	public Player(String name, Shape shape) {
+		super(0,0);
 		this.shape = shape;
-		this.setLevel(level);
 		this.name = name;
 	}
 	public float getHeight() {
@@ -44,10 +52,7 @@ public class Player extends Entity {
 		return this.getShape().getWidth();
 	}
 	public void movePlayer(Vector2f vel) {
-
-	
 		this.push(vel.scale(this.getSpeed()));
-		
 	}
 	public void setName(String name) {
 		this.name = name;
@@ -69,6 +74,7 @@ public class Player extends Entity {
 	}
 	
 	public boolean update(int delta){
+		if (!this.initialized)return false;
 		super.update(delta);
 		this.vel.scale(0);
 		if (this.pos.x < 0)this.pos.x = 0;
@@ -82,6 +88,7 @@ public class Player extends Entity {
 		return this.shape;
 	}
 	public void render(Graphics g) {
+		if (!this.initialized)return;
 		float x = getPos().getX()*level.getTileWidth();
 		float y = getPos().getY()*level.getTileHeight();
 		float w = this.getWidth()*level.getTileWidth();
