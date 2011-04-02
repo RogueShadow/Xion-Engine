@@ -44,9 +44,10 @@ public class Player extends Entity {
 		return this.getShape().getWidth();
 	}
 	public void movePlayer(Vector2f vel) {
-		if (!level.onWall(getPos().add(getVel()), shape)){
-			this.push(vel.scale(this.getSpeed()));
-		}else this.pull(vel.scale(this.getSpeed()));
+
+	
+		this.push(vel.scale(this.getSpeed()));
+		
 	}
 	public void setName(String name) {
 		this.name = name;

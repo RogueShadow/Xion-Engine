@@ -51,9 +51,13 @@ public class TestGame extends BasicGame {
     }
     public void setCurrentLevel(int i){
     	currentLevel = i;
+    	//TODO add code to attempt to find and load a level.
     }
     public TestGame(){
         super("Great Tiles of Doom");
+    }
+    public Level loadLevel(String tmxFile) throws SlickException {
+    	return new Level(new TiledMap(tmxFile));
     }
 
     @SuppressWarnings("unchecked")
@@ -64,7 +68,7 @@ public class TestGame extends BasicGame {
         debug.getEffects().add(new ColorEffect(java.awt.Color.white));
         debug.addAsciiGlyphs();
         debug.loadGlyphs();
-    	Level level = new Level(new TiledMap("res/xion_graal.tmx"));
+    	Level level = loadLevel("res/xion_graal.tmx");
     	Player player = new Player("Rogue",50,50,new Rectangle(0,0,2,3),level);
     	Player p1 = new Player("Shadow",5,5,new Rectangle(0,0,2,2),level);
     	cam = new Camera(0,0,WIDTH,HEIGHT,level.getHeight(),level.getWidth(),level.getTileHeight());

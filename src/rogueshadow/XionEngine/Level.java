@@ -53,16 +53,9 @@ public class Level {
 	public int getTileId(int x, int y, int layer){
 		return map.getTileId( x, y, layer);
 	}
-	public boolean onWall(Vector2f pos,Shape shape){
-		float x = pos.getX();
-		float y = pos.getY();
-		int id = getTileId((int)x,(int) y, 1);
-		if (id != 0){
-			Shape test = new Rectangle((int)x,(int)y,1,1);
-			if (shape.intersects(test)){
-				return true;
-			}else return false;
-		}return false;
+	public boolean onWall(Vector2f pos){
+		int id = getTileId((int)Math.floor(pos.getX()),(int)Math.floor(pos.getY()), 1);
+		if (id == 0)return false; else return true;
 	}
 	public void update() {
 		
