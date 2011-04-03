@@ -61,21 +61,6 @@ public class Level {
 	public int getTileHeight(){
 		return map.getTileHeight();
 	}
-	public int getTileId(int x, int y, int layer){
-		return map.getTileId( x, y, layer);
-	}
-	public boolean onWall(Vector2f pos){
-		int id = getTileId((int)Math.floor(pos.getX()),(int)Math.floor(pos.getY()), 1);
-		if (id == 0)return false; else return true;
-	}
-	public boolean onWall(Shape s){
-		for (Shape b: blocks){
-			if (s.intersects(b)){
-				return true;
-			}
-		}
-		return false;
-	}
 	public void update(int delta) {
 		
 	}

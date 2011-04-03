@@ -28,15 +28,8 @@ import rogueshadow.XionEngine.Player;
  * @author Adam
  */
 public class TestGame extends BasicGame {
-
     public static  final Integer HEIGHT = 600;
     public static  final Integer WIDTH = 800;
-    public static void main(String[] argv) throws SlickException {
-    	AppGameContainer container = new AppGameContainer(new TestGame(), WIDTH, HEIGHT, false);
-    	container.setVSync(true);
-    	container.setTargetFrameRate(60);
-    	container.start();
-    }
 	public static GameContainer container;
     public Input input;
     public boolean debugmode = true;
@@ -48,9 +41,13 @@ public class TestGame extends BasicGame {
     public UnicodeFont debug;
 	DecimalFormat df = new DecimalFormat("00.00");
 	public String ds; // debug info string
+	
     public Level getCurrentLevel(){
     	return levels.get(currentLevel);
     }
+	public ArrayList<Player> getPlayers() {
+		return players;
+	}
     public boolean setCurrentLevel(String level){
     	int levelIndex = -1;
     	for (Level l: levels){
@@ -68,9 +65,6 @@ public class TestGame extends BasicGame {
     		return true;
     	}
     	return false;
-    }
-    public TestGame(){
-        super("Great Tiles of Doom");
     }
     public Level loadLevel(String tmxFile) throws SlickException {
     	String[] lvlname = tmxFile.split("/");
@@ -91,17 +85,16 @@ public class TestGame extends BasicGame {
         debug.loadGlyphs();
     	levels.add(loadLevel("res/xion_graal.tmx"));
     	levels.add(loadLevel("res/xion_graal.tmx"));
+    	levels.add(loadLevel("res/platform_test.tmx"));
     	players.add(new Player("Giant Jack",3,6));
     	players.add(new Player("Test",2,2));
     	players.add(new Player("Tiny Tim",1,1));
     	players.add(new Player("Odd Eye", 1.6f, 1.3f));
-    	if (!setCurrentLevel("xion_graal")){
+    	if (!setCurrentLevel("platform_test")){
     		System.out.println("Failed to set level");
     		container.exit();
     	}
     }
-
- 
     @Override
 	public void render(GameContainer container, Graphics g) throws SlickException {;
 		
@@ -112,28 +105,33 @@ public class TestGame extends BasicGame {
         	p.render(g);
         }
         levels.get(currentLevel).getMap().render(0, 0, 2);
-        levels.get(currentLevel).drawCollision(g);
+       // levels.get(currentLevel).drawCollision(g);
         cam.translateOut(g);
         g.drawString("Intersects?: " + ds, 10, 30);
     }
     @Override
 	public void update(GameContainer container, int delta) throws SlickException {
-        Vector2f vel = new Vector2f(0,0);
+        Player p = players.get(currentPlayer);
         input = container.getInput();
-        if (input.isKeyDown(Input.KEY_UP))vel.y -= 1;
-        if (input.isKeyDown(Input.KEY_DOWN))vel.y += 1;
-        if (input.isKeyDown(Input.KEY_LEFT))vel.x -= 1;
-        if (input.isKeyDown(Input.KEY_RIGHT))vel.x += 1;
+        if (input.isKeyDown(Input.KEY_UP) && p.canJump())p.jump();
+        if (input.isKeyDown(Input.KEY_DOWN))p.moveDown();
+        if (input.isKeyDown(Input.KEY_LEFT))p.moveLeft();
+        if (input.isKeyDown(Input.KEY_RIGHT))p.moveRight();
         if (input.isKeyDown(Input.KEY_Q))currentPlayer = ((currentPlayer + 1) % players.size()) ;
-        players.get(currentPlayer).setVel(vel);
         if (input.isKeyDown(Input.KEY_ESCAPE))container.exit();
         levels.get(currentLevel).update(delta);
-        for (Player p: players){
-        	p.update(delta);
+        for (Player ps: players){
+        	ps.update(delta);
         }
-        cam.focusCam(players.get(currentPlayer).getPos());
+        cam.focusCam(p.getPos());
     }
-	public ArrayList<Player> getPlayers() {
-		return players;
-	}
+    public TestGame(){
+        super("Great Tiles of Doom");
+    }
+    public static void main(String[] argv) throws SlickException {
+    	AppGameContainer container = new AppGameContainer(new TestGame(), WIDTH, HEIGHT, false);
+    	container.setVSync(true);
+    	container.setTargetFrameRate(60);
+    	container.start();
+    }
 }

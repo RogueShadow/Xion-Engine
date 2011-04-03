@@ -38,6 +38,7 @@ public class Player extends Entity {
 		this.initialized = true;
 	}
 	float speed = 12f/1000f;
+	private boolean canJump = true;
 
 	public Player(String name, float width, float height) {
 		super(0,0);
@@ -76,10 +77,10 @@ public class Player extends Entity {
 	
 	public boolean update(int delta){
 		if (!this.initialized)return false;
-		this.vel.scale(getSpeed());
+		this.vel.y += 0.0001f*delta;
 		checkCollisions(delta);
 		super.update(delta);
-		this.vel.scale(0);
+		this.vel.x = 0;
 		if (this.pos.x < 0)this.pos.x = 0;
 		if (this.pos.y < 0)this.pos.y = 0;
 		if (this.pos.x > this.WorldW - this.getWidth())this.pos.x = this.WorldW - this.getWidth();
@@ -101,6 +102,7 @@ public class Player extends Entity {
 				nY = this.pos.getY() + (this.vel.getY()/2f)*delta;
 				this.vel.y = this.vel.y/2f;
 				if (level.checkCollisions(new Rectangle(this.pos.getX(),nY,this.width,this.height))){
+					if (this.vel.y > 0)this.canJump = true;
 					this.vel.y = 0;
 				}
 			}
@@ -123,5 +125,23 @@ public class Player extends Entity {
 		g.draw(rect);
 		g.drawString(getName(), rect.getX() - (getName().length()*2), rect.getY() + rect.getHeight() + 2);
 		g.setColor(Color.white);
+	}
+	public boolean canJump() {
+		return this.canJump;
+	}
+	public void jump() {
+		getVel().y -= getSpeed()*4;
+		this.canJump  = false;
+	}
+	public void moveDown() {
+		// TODO Auto-generated method stub
+		
+	}
+	public void moveLeft() {
+		getVel().x -= getSpeed();
+		
+	}
+	public void moveRight() {
+		getVel().x += getSpeed();
 	}
 }

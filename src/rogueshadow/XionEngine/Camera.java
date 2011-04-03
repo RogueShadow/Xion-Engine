@@ -11,6 +11,7 @@ public class Camera {
 	float H;// half screen height in tiles
 	float WorldW = 0;// world width - screen width 
 	float WorldH = 0;// world height - screen height
+	float scale = 1f;// doesn't quite work... camera is way off. HELP
 	int tilesize = 16;
 	public Camera(Vector2f pos) {
 		this.pos = pos;
@@ -24,6 +25,9 @@ public class Camera {
 	}
 	public void translateIn(Graphics g) {
 		g.pushTransform();
+		g.translate(-W*this.tilesize, -H*this.tilesize);
+		g.scale(this.scale, this.scale);
+		g.translate(W*this.tilesize,H*this.tilesize);
 		g.translate(-this.pos.getX()*this.tilesize, -this.pos.getY()*this.tilesize);
 	}
 	public void translateOut(Graphics g) {
@@ -32,6 +36,7 @@ public class Camera {
 	public void focusCam(Vector2f pos2) {
 		this.pos.x = pos2.getX() - W;
 		this.pos.y = pos2.getY() - H;
+
 		if (this.pos.x < 0)this.pos.x = 0;
 		if (this.pos.y < 0)this.pos.y = 0;
 		if (this.pos.x >= this.WorldW)this.pos.x = this.WorldW ;
