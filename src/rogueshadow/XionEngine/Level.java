@@ -44,7 +44,7 @@ public class Level {
 		for (int x = 0; x < map.getWidth();x++){
 			for (int y = 0; y < map.getHeight();y++){
 				if (map.getTileId(x, y, 1) != 0){
-					blocks.add(new Rectangle(x,y,.9f,.9f));
+					blocks.add(new Rectangle(x+p,y+p,1f-p,1f-p));
 				}
 			}
 		}

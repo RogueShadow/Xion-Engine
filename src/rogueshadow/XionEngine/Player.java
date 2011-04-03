@@ -91,10 +91,18 @@ public class Player extends Entity {
 		float nY = this.pos.getY() + this.vel.getY()*delta;
 		if (level.checkCollisions(new Rectangle(nX,nY,this.width,this.height))){
 			if (level.checkCollisions(new Rectangle(nX,this.pos.getY(),this.width,this.height))){
-				this.vel.x = 0;
+				nX = this.pos.getX() + (this.vel.getX()/2f)*delta;
+				this.vel.x = this.vel.x/2f;
+				if (level.checkCollisions(new Rectangle(nX,this.pos.getY(),this.width,this.height))){
+					this.vel.x = 0;
+				}
 			}
 			if (level.checkCollisions(new Rectangle(this.pos.getX(),nY,this.width,this.height))){
-				this.vel.y = 0;
+				nY = this.pos.getY() + (this.vel.getY()/2f)*delta;
+				this.vel.y = this.vel.y/2f;
+				if (level.checkCollisions(new Rectangle(this.pos.getX(),nY,this.width,this.height))){
+					this.vel.y = 0;
+				}
 			}
 		}
 	}

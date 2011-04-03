@@ -89,13 +89,12 @@ public class TestGame extends BasicGame {
         debug.getEffects().add(new ColorEffect(java.awt.Color.white));
         debug.addAsciiGlyphs();
         debug.loadGlyphs();
-    	Player player = new Player("Rogue",2,3);
-    	Player p1 = new Player("Shadow",2,2);
-
     	levels.add(loadLevel("res/xion_graal.tmx"));
     	levels.add(loadLevel("res/xion_graal.tmx"));
-    	players.add(player);
-    	players.add(p1);
+    	players.add(new Player("Giant Jack",3,6));
+    	players.add(new Player("Test",2,2));
+    	players.add(new Player("Tiny Tim",1,1));
+    	players.add(new Player("Odd Eye", 1.6f, 1.3f));
     	if (!setCurrentLevel("xion_graal")){
     		System.out.println("Failed to set level");
     		container.exit();
@@ -126,7 +125,7 @@ public class TestGame extends BasicGame {
         if (input.isKeyDown(Input.KEY_LEFT))vel.x -= 1;
         if (input.isKeyDown(Input.KEY_RIGHT))vel.x += 1;
         if (input.isKeyDown(Input.KEY_Q))currentPlayer = ((currentPlayer + 1) % players.size()) ;
-        players.get(currentPlayer).setVel(vel.normalise());
+        players.get(currentPlayer).setVel(vel);
         if (input.isKeyDown(Input.KEY_ESCAPE))container.exit();
         levels.get(currentLevel).update(delta);
         for (Player p: players){
