@@ -89,8 +89,8 @@ public class TestGame extends BasicGame {
         debug.getEffects().add(new ColorEffect(java.awt.Color.white));
         debug.addAsciiGlyphs();
         debug.loadGlyphs();
-    	Player player = new Player("Rogue",new Rectangle(0,0,2,3));
-    	Player p1 = new Player("Shadow",new Rectangle(0,0,2,2));
+    	Player player = new Player("Rogue",2,3);
+    	Player p1 = new Player("Shadow",2,2);
 
     	levels.add(loadLevel("res/xion_graal.tmx"));
     	levels.add(loadLevel("res/xion_graal.tmx"));
@@ -113,7 +113,7 @@ public class TestGame extends BasicGame {
         	p.render(g);
         }
         levels.get(currentLevel).getMap().render(0, 0, 2);
-
+        levels.get(currentLevel).drawCollision(g);
         cam.translateOut(g);
         g.drawString("Intersects?: " + ds, 10, 30);
     }
@@ -126,12 +126,9 @@ public class TestGame extends BasicGame {
         if (input.isKeyDown(Input.KEY_LEFT))vel.x -= 1;
         if (input.isKeyDown(Input.KEY_RIGHT))vel.x += 1;
         if (input.isKeyDown(Input.KEY_Q))currentPlayer = ((currentPlayer + 1) % players.size()) ;
-        
-        
-        players.get(currentPlayer).movePlayer(vel);
-
+        players.get(currentPlayer).setVel(vel.normalise());
         if (input.isKeyDown(Input.KEY_ESCAPE))container.exit();
-        levels.get(currentLevel).update();
+        levels.get(currentLevel).update(delta);
         for (Player p: players){
         	p.update(delta);
         }

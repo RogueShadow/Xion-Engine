@@ -1,7 +1,11 @@
 package rogueshadow.XionEngine;
 
+import java.util.ArrayList;
+
+import org.newdawn.slick.Graphics;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
+import org.newdawn.slick.geom.Transform;
 import org.newdawn.slick.geom.Vector2f;
 import org.newdawn.slick.tiled.*;
 import rogueshadow.XionEngine.Player;
@@ -10,6 +14,7 @@ public class Level {
 	TiledMap map;
 	Player player;
 	String name; 
+	ArrayList<Shape> blocks = new ArrayList<Shape>();
 	
 	public String getName() {
 		return name;
@@ -35,6 +40,14 @@ public class Level {
 	public Level(TiledMap map, String lvlname) {
 		this.map = map;
 		this.name = lvlname;
+		float p = 1f/16f;
+		for (int x = 0; x < map.getWidth();x++){
+			for (int y = 0; y < map.getHeight();y++){
+				if (map.getTileId(x, y, 1) != 0){
+					blocks.add(new Rectangle(x,y,.9f,.9f));
+				}
+			}
+		}
 	}
 	public int getWidth(){
 		return map.getWidth();
@@ -55,7 +68,39 @@ public class Level {
 		int id = getTileId((int)Math.floor(pos.getX()),(int)Math.floor(pos.getY()), 1);
 		if (id == 0)return false; else return true;
 	}
-	public void update() {
+	public boolean onWall(Shape s){
+		for (Shape b: blocks){
+			if (s.intersects(b)){
+				return true;
+			}
+		}
+		return false;
+	}
+	public void update(int delta) {
 		
+	}
+	public ArrayList<Shape> getRenderShapes(ArrayList<Shape> shapes){
+		ArrayList<Shape> renders = new ArrayList<Shape>();
+		for (Shape b: shapes){
+			float x = b.getX()*getTileWidth();
+			float y = b.getY()*getTileHeight();
+			float w = b.getWidth()*getTileWidth();
+			float h = b.getHeight()*getTileHeight();
+			renders.add(new Rectangle(x,y,w,h));
+		}
+		return renders;
+	}
+	public void drawCollision(Graphics g) {
+		for (Shape b: getRenderShapes(blocks)){
+			g.draw(b);
+		}
+	}
+	public boolean checkCollisions(Shape p) {
+		for (Shape b: blocks){
+			if (p.intersects(b)){
+				return true;
+			}
+		}
+		return false;
 	}
 }

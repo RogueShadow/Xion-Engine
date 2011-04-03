@@ -3,6 +3,7 @@
  */
 package rogueshadow.XionEngine;
 
+import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
@@ -18,9 +19,10 @@ import rogueshadow.XionEngine.test.TestGame;
 public class Player extends Entity {
 	boolean initialized = false;
 	private String name;
-	Shape shape;
 	int WorldW;
 	int WorldH;
+	float width;
+	float height;
 	Level level;
 	public void setLevel(Level level) {
 		this.level = level;
@@ -37,23 +39,22 @@ public class Player extends Entity {
 	}
 	float speed = 12f/1000f;
 
-	public Player(String name, Shape shape) {
+	public Player(String name, float width, float height) {
 		super(0,0);
-		this.shape = shape;
 		this.name = name;
+		this.width = width;
+		this.height = height;
 	}
 	public float getHeight() {
-		return this.getShape().getHeight();
+		return this.height;
 	}
 	public String getName() {
 		return name;
 	}
 	public float getWidth() {
-		return this.getShape().getWidth();
+		return this.width;
 	}
-	public void movePlayer(Vector2f vel) {
-		this.push(vel.scale(this.getSpeed()));
-	}
+
 	public void setName(String name) {
 		this.name = name;
 	}
@@ -75,6 +76,8 @@ public class Player extends Entity {
 	
 	public boolean update(int delta){
 		if (!this.initialized)return false;
+		this.vel.scale(getSpeed());
+		checkCollisions(delta);
 		super.update(delta);
 		this.vel.scale(0);
 		if (this.pos.x < 0)this.pos.x = 0;
@@ -83,18 +86,34 @@ public class Player extends Entity {
 		if (this.pos.y > this.WorldH - this.getHeight())this.pos.y = this.WorldH - this.getHeight();
 		return true;
 	}
+	private void checkCollisions(int delta) {
+		float nX = this.pos.getX() + this.vel.getX()*delta;
+		float nY = this.pos.getY() + this.vel.getY()*delta;
+		if (level.checkCollisions(new Rectangle(nX,nY,this.width,this.height))){
+			if (level.checkCollisions(new Rectangle(nX,this.pos.getY(),this.width,this.height))){
+				this.vel.x = 0;
+			}
+			if (level.checkCollisions(new Rectangle(this.pos.getX(),nY,this.width,this.height))){
+				this.vel.y = 0;
+			}
+		}
+	}
 	public Shape getShape() {
-		this.shape.setLocation(this.pos);
-		return this.shape;
+		return new Rectangle(this.pos.getX(),this.pos.getY(),this.width,this.height);
+	}
+	protected Shape getRenderShape() {
+		float x = this.pos.getX() * level.getTileWidth();
+		float y = this.pos.getY() * level.getTileHeight();
+		float w = this.width * level.getTileWidth();
+		float h = this.height * level.getTileHeight();
+		return new Rectangle(x,y,w,h);
 	}
 	public void render(Graphics g) {
 		if (!this.initialized)return;
-		float x = getPos().getX()*level.getTileWidth();
-		float y = getPos().getY()*level.getTileHeight();
-		float w = this.getWidth()*level.getTileWidth();
-		float h = this.getHeight()*level.getTileHeight();
-		Shape drawn = new Rectangle(x,y,w,h);
-		g.fill(drawn);
-		g.drawString(getName(), x - (getName().length()*2), y + h + 2);
+		Shape rect = getRenderShape();
+		g.setColor(Color.blue);
+		g.draw(rect);
+		g.drawString(getName(), rect.getX() - (getName().length()*2), rect.getY() + rect.getHeight() + 2);
+		g.setColor(Color.white);
 	}
 }
